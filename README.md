@@ -1,0 +1,3 @@
+# FFC - fancy flashcard
+
+coming soon...
