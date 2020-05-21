@@ -1,18 +1,31 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <DeckSelection title="Fancy Flashcard" v-bind:decks="decks"></DeckSelection>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import DeckSelection from './components/deckselection/DeckSelection.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    DeckSelection
+  },
+  data() {
+    return {
+      decks: [
+        {
+          id: 1,
+          deckname: "Test1"
+        },
+        {
+          id: 2,
+          deckname: "Test2"
+        }
+      ]
+    };
+  },
 }
 </script>
 
