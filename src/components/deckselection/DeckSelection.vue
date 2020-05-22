@@ -7,6 +7,8 @@
       <Deck v-for="deck in decks" :key="deck.id" v-bind:deckname="deck.deckname"></Deck>
       <input type="submit" value="Starten" />
     </form>
+    <hr>
+    <router-link to="/about">Example Routing - About</router-link>
   </div>
 </template>
 
