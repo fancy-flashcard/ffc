@@ -14,6 +14,7 @@
     - [Compiles and minifies for production](#compiles-and-minifies-for-production)
     - [Lints and fixes files](#lints-and-fixes-files)
     - [Customize configuration](#customize-configuration)
+- [Deployment](#deployment)
 
 ## Documentation
 
@@ -147,3 +148,7 @@ npm run lint
 
 #### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Deployment
+
+The app is build and deployed to https://dhbw-ffc.github.io/ffc on every push to master branch (via GitHub Actions and GitHub Pages).
