@@ -1,5 +1,7 @@
 # FFC - Fancy FlashCard <!-- omit in toc -->
 
+![Build and Deploy](https://github.com/dhbw-ffc/ffc/workflows/Build%20and%20Deploy/badge.svg)
+
 - [Documentation](#documentation)
   - [Introduction](#introduction)
   - [Terminology](#terminology)
