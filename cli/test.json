@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "author": "Niko Lockenvitz"
+  },
+  "decks": {
+    "d0": {
+      "meta": {
+        "deck_name": "d0",
+        "next_id": 2
+      },
+      "cards": {
+        "0": {
+          "q": "2+2?",
+          "a": "4"
+        },
+        "1": {
+          "q": "3*4*10?",
+          "a": "5!"
+        }
+      }
+    },
+    "d1": {
+      "meta": {
+        "deck_name": "d1",
+        "next_id": 3
+      },
+      "cards": {
+        "0": {
+          "q": "How many seconds in a day (on earth)?",
+          "a": "86400"
+        },
+        "2": {
+          "q": "Has the year 2000 been a leap year?",
+          "a": "yes (because each year divisible by 4 is a leap year (except the ones divisible by 100 (except the ones divisible by 400)))"
+        }
+      }
+    }
+  }
+}

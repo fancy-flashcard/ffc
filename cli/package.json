@@ -1,0 +1,13 @@
+{
+  "name": "cli",
+  "version": "0.0.1",
+  "description": "generate files for ffc",
+  "main": "index.js",
+  "scripts": {
+    "cli": "node index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Niko Lockenvitz",
+  "license": "MIT"
+}
