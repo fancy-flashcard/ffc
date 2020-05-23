@@ -11,6 +11,8 @@ jobs:
 
       - name: Install and Build
         run: |
+          git config user.email "gh-pages-deploy@nikolockenvitz.de"
+          git config user.name "Niko Lockenvitz"
           npm install
           npm run build
 
