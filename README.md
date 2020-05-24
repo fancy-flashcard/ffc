@@ -67,7 +67,7 @@ Our first proposal is as follows:
             "meta": {
                 "deck_name": "Full Name of the Deck",
                 "description": "Description",
-                "next_id": 3,
+                "next_card_id": 3,
                 "...": "..."
             },
             "cards": {
@@ -85,6 +85,7 @@ Our first proposal is as follows:
     }
 }
 ````
+You can find an example file and a command line interface to create and edit such files in the [cli folder of this repository](cli).
 
 ### Internal Storing of Decks, Cards and Learning Progress
 ````json
@@ -101,7 +102,7 @@ Our first proposal is as follows:
                 "short_name": "Short Name of the Deck",
                 "deck_name": "Full Name of the Deck",
                 "description": "Description",
-                "next_id": 3,
+                "next_card_id": 3,
                 "...": "..."
             }
         },
