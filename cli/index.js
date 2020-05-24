@@ -13,7 +13,22 @@ readline.on('close', async () => {
     process.exit(0);
 });
 
+const CONSOLE_LOG_COLOR_FG_RED   = "\x1b[31m";
+const CONSOLE_LOG_COLOR_FG_GREEN = "\x1b[32m";
+const CONSOLE_LOG_COLOR_RESET    = "\x1b[0m";
+let asciiArt = `
+  __                          __ _           _                       _ 
+ / _|                        / _| |         | |                     | |
+| |_ __ _ _ __   ___ _   _  | |_| | __ _ ___| |__   ___ __ _ _ __ __| |
+|  _/ _\` | '_ \\ / __| | | | |  _| |/ _\` / __| '_ \\ / __/ _\` | '__/ _\` |
+| || (_| | | | | (__| |_| | | | | | (_| \\__ \\ | | | (_| (_| | | | (_| |
+|_| \\__,_|_| |_|\\___|\\__, | |_| |_|\\__,_|___/_| |_|\\___\\__,_|_|  \\__,_|
+                      __/ |                                            
+                     |___/                                             
+`;
+
 async function cli () {
+    logWelcomeMessage();
     let cmd;
     while (true) {
         cmd = await readCommand(`Commands: new file <filename>, edit file <filename>, exit`);
@@ -23,7 +38,8 @@ async function cli () {
             if (await doesFileAlreadyExist(curFilename)) {
                 console.log(`There is already a file ${curFilename}`);
             } else {
-                curFileContent = { meta: {}, decks: {} };
+                const author = await readValue("Author");
+                curFileContent = { meta: { author }, decks: {} };
                 await saveCurrentFile(false);
                 await cliEditFile(curFilename);
             }
@@ -42,19 +58,28 @@ async function cli () {
 }
 cli();
 
+function logWelcomeMessage () {
+    console.log(asciiArt);
+    let msg = `Welcome to the CLI to create files, decks and cards for `
+        + `${CONSOLE_LOG_COLOR_FG_GREEN}Fancy Flashcard${CONSOLE_LOG_COLOR_RESET}. `
+        + `Everything is autosaved.`;
+    console.log(msg);
+}
+
 async function cliEditFile (filename) {
     saveOnClose = true;
     curFilename = filename;
     if (!curFilename.endsWith(".json")) curFilename += ".json";
     curFileContent = await readJSONFromFile(curFilename);
-    console.log(`editing ${curFilename}`);
+    console.log(`now editing ${curFilename}`);
     while (true) {
-        const cmd = await readCommand(`Commands: new deck <name>, list decks, edit deck <name>, delete deck <name>, show meta, meta <attr> <value>, whereami, save, quit`);
+        const cmd = await readCommand(`Commands: new deck <name>, list decks, edit deck <name>, delete deck <name>, show meta, meta <attr> <value>, whereami, back`);
         if (cmd.startsWith("new deck ")) {
             let deckName = cmd.substring("new deck ".length);
             if (curFileContent.decks[deckName] === undefined) {
+                const description = await readValue("Description");
                 curFileContent.decks[deckName] = {
-                    meta: { deck_name: deckName, next_id: 0 },
+                    meta: { deck_name: deckName, next_card_id: 0, description },
                     cards: {}
                 }
                 await cliEditDeck(deckName);
@@ -88,10 +113,8 @@ async function cliEditFile (filename) {
             const value = cmd.substring(`meta ${attr} `.length);
             curFileContent.meta[attr] = value;
         } else if (cmd === "whereami") {
-            console.log(`File: ${curFilename}`);
-        } else if (cmd === "save") {
-            await saveCurrentFile();
-        } else if (cmd === "quit") {
+            logWhereIAm(curFilename);
+        } else if (cmd === "back") {
             await saveCurrentFile();
             break;
         } else {
@@ -101,8 +124,9 @@ async function cliEditFile (filename) {
 }
 
 async function cliEditDeck (deckName) {
+    console.log(`now editing ${deckName} in ${curFilename}`);
     while (true) {
-        const cmd = await readCommand(`Commands: add cards, list cards, edit card <id>, delete card <id>, show meta, meta <attr> <value>, whereami, save, quit`);
+        const cmd = await readCommand(`Commands: add cards, list cards, edit card <id>, delete card <id>, show meta, meta <attr> <value>, whereami, back`);
         if (cmd === "add cards") {
             await cliAddCards(deckName);
         } else if (cmd === "list cards") {
@@ -115,9 +139,9 @@ async function cliEditDeck (deckName) {
             const card = curFileContent.decks[deckName].cards[cardId];
             console.log(`q: ${card.q} a: ${card.a}`);
             console.log("If you leave a field blank, it will not be changed");
-            const q = await readQA("Q");
+            const q = await readValue("Q");
             if (q) card.q = q;
-            const a = await readQA("A");
+            const a = await readValue("A");
             if (a) card.a = a;
             console.log(`q: ${card.q} a: ${card.a}`);
         } else if (cmd.startsWith("delete card ")) {
@@ -138,10 +162,8 @@ async function cliEditDeck (deckName) {
             const value = cmd.substring(`meta ${attr} `.length);
             curFileContent.decks[deckName].meta[attr] = value;
         } else if (cmd === "whereami") {
-            console.log(`Deck: ${curFilename} > ${deckName}`);
-        } else if (cmd === "save") {
-            await saveCurrentFile();
-        } else if (cmd === "quit") {
+            logWhereIAm(curFilename, deckName);
+        } else if (cmd === "back") {
             await saveCurrentFile();
             break;
         } else {
@@ -151,28 +173,25 @@ async function cliEditDeck (deckName) {
 }
 
 async function cliAddCards (deckName) {
-    console.log("\nEnter questions and answers. When you leave the question blank, you can run commands: continue, save, quit");
+    console.log("\nEnter questions and answers. When you leave the question blank, you can run commands: continue, back");
     while (true) {
         console.log("");
-        const q = await readQA("Q");
+        const q = await readValue("Q");
         if (q === "") {
-            const cmd = await readCommand(`Commands: continue, save, quit`);
+            const cmd = await readCommand(`Commands: continue, back`);
             if (cmd === "continue") {
                 continue;
-            } else if (cmd === "save") {
-                await saveCurrentFile();
-                continue;
-            } else if (cmd === "quit") {
+            } else if (cmd === "back") {
                 await saveCurrentFile();
                 return;
             } else {
                 console.log("Your command was not understood...");
                 continue;
             }
-        } else if (["quit", "exit"].includes(q)) {
-            console.log("(If you want to quit, you need to leave the question blank.)");
+        } else if (["back", "quit", "exit"].includes(q)) {
+            console.log("(If you want to go back, you need to leave the question blank.)");
         }
-        const a = await readQA("A");
+        const a = await readValue("A");
 
         const id = addCardToDeck(deckName, q, a);
         console.log(`id: ${id}\n`);
@@ -180,10 +199,17 @@ async function cliAddCards (deckName) {
 }
 
 function addCardToDeck (deckName, q, a) {
-    const id = curFileContent.decks[deckName].meta.next_id;
+    const id = curFileContent.decks[deckName].meta.next_card_id;
     curFileContent.decks[deckName].cards[id] = { q, a };
-    curFileContent.decks[deckName].meta.next_id = id + 1;
+    curFileContent.decks[deckName].meta.next_card_id = id + 1;
     return id;
+}
+
+function logWhereIAm (filename, deckName) {
+    if (deckName) {
+        return console.log(`Deck: ${filename} > ${deckName}`);
+    }
+    console.log(`File: ${filename}`);
 }
 
 async function readCommand (question) {
@@ -194,7 +220,7 @@ async function readCommand (question) {
     });
 }
 
-async function readQA (text) {
+async function readValue (text) {
     return new Promise((resolve, reject) => {
         readline.question(`${text}: `, input => {
             resolve(input);

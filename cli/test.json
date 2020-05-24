@@ -6,7 +6,8 @@
     "d0": {
       "meta": {
         "deck_name": "d0",
-        "next_id": 2
+        "next_card_id": 2,
+        "description": ""
       },
       "cards": {
         "0": {
@@ -22,7 +23,8 @@
     "d1": {
       "meta": {
         "deck_name": "d1",
-        "next_id": 3
+        "next_card_id": 3,
+        "description": ""
       },
       "cards": {
         "0": {
