@@ -62,25 +62,27 @@ Our first proposal is as follows:
         "author": "Name of the Author",
         "...": "..."
     },
-    "deck_short_name": {
-        "meta": {
-            "deck_name": "Full Name of the Deck",
-            "description": "Description",
-            "next_id": 3,
-            "...": "..."
-        },
-        "cards": {
-            "0": {
-                "q": "question",
-                "a": "answer"
+    "decks": {
+        "deck_short_name": {
+            "meta": {
+                "deck_name": "Full Name of the Deck",
+                "description": "Description",
+                "next_id": 3,
+                "...": "..."
             },
-            "2": {
-                "q": "question",
-                "a": "answer"
+            "cards": {
+                "0": {
+                    "q": "question",
+                    "a": "answer"
+                },
+                "2": {
+                    "q": "question",
+                    "a": "answer"
+                }
             }
-        }
-    },
-    "...": {}
+        },
+        "...": {}
+    }
 }
 ````
 
