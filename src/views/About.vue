@@ -3,11 +3,11 @@
     <v-container fluid>
       <v-row align="center" justify="center">
         <v-col cols="10">
-          <v-card>
-            <v-card-text>
-              <h1>This is an about page</h1>
-            </v-card-text>
-          </v-card>
+          <span class="title">Fancy Flashcard</span>
+          <br>
+          &copy; {{ new Date().getFullYear() }} Niko Lockenvitz &amp; Rene-Pascal Fischer
+          <br>
+          <a href="https://github.com/dhbw-ffc/ffc">https://github.com/dhbw-ffc/ffc</a>
         </v-col>
       </v-row>
     </v-container>

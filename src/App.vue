@@ -5,7 +5,6 @@
         <v-content>
           <NavigationBar title="Fancy Flashcard"></NavigationBar>
           <router-view />
-          <Footer></Footer>
         </v-content>
       </v-app>
     </v-app>
@@ -28,11 +27,15 @@ export default {
 </script>
 
 <style>
+html, body {
+  /* apply dark mode to scrollbar in firefox desktop */
+  background-color: #000;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+}
+.v-list {
+  text-align: left;
 }
 </style>
