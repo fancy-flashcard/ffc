@@ -32,51 +32,41 @@
     </v-navigation-drawer>
 
     <v-app-bar :clipped-left="primaryDrawer.clipped" app>
-      <v-app-bar-nav-icon
-        v-if="primaryDrawer.type !== 'permanent'"
+      <v-app-bar-nav-icon v-if="numberOfSelectedDecks===0"
         @click.stop="primaryDrawer.model = !primaryDrawer.model"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-btn v-else icon
+        @click="deselectAll"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+
+
+      <v-toolbar-title>
+        {{ numberOfSelectedDecks > 0
+          ? `${numberOfSelectedDecks} deck${numberOfSelectedDecks === 1 ? "":"s"} selected`
+          : title }}
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <v-btn icon v-if="numberOfSelectedDecks>0"
+        @click="selectAll"
+      >
         <v-icon>mdi-checkbox-multiple-marked</v-icon>
       </v-btn>
 
-      <v-btn icon>
+      <v-btn icon v-if="numberOfSelectedDecks>0"
+        @click="deselectAll"
+      >
         <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
       </v-btn>
 
-      <v-btn icon>
+      <v-btn icon v-if="numberOfSelectedDecks>0"
+        @click="deleteSelected"
+      >
         <v-icon>mdi-delete</v-icon>
       </v-btn>
-
-      <!-- https://vuetifyjs.com/en/components/toolbars/#contextual-action-bars -->
-
-      <v-menu
-        bottom
-        left
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            icon
-            v-on="on"
-          >
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item
-            v-for="(item, i) in items"
-            :key="i"
-            @click=""
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
 
     </v-app-bar>
   </div>
@@ -85,6 +75,11 @@
 <script>
 export default {
   name: "NavigationBar",
+  created: function () {
+    this.$eventHub.$on("numberOfSelectedDecks", (data) => {
+      this.numberOfSelectedDecks = data;
+    });
+  },
   props: {
     title: String
   },
@@ -96,12 +91,19 @@ export default {
       floating: false,
       mini: false
     },
-    items: [
-      { title: 'Select All' },
-      { title: 'Deselect All' },
-      { title: 'Delete' },
-    ]
-  })
+    numberOfSelectedDecks: 0,
+  }),
+  methods: {
+    deselectAll () {
+      this.$eventHub.$emit("clearDeckSelection");
+    },
+    selectAll () {
+      this.$eventHub.$emit("selectAllDecks");
+    },
+    deleteSelected () {
+      this.$eventHub.$emit("deleteSelectedDecks");
+    },
+  },
 };
 </script>
 
