@@ -16,7 +16,7 @@
             <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Startseite</v-list-item-title>
+            <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         
@@ -49,6 +49,12 @@
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
+
+      <v-btn icon v-if="numberOfSelectedDecks===1"
+        @click="showInfoForSelectedDeck"
+      >
+        <v-icon>mdi-information</v-icon>
+      </v-btn>
 
       <v-btn icon v-if="numberOfSelectedDecks>0"
         @click="selectAll"
@@ -102,6 +108,9 @@ export default {
     },
     deleteSelected () {
       this.$eventHub.$emit("deleteSelectedDecks");
+    },
+    showInfoForSelectedDeck () {
+      this.$eventHub.$emit("showInformationForSelectedDeck");
     },
   },
 };

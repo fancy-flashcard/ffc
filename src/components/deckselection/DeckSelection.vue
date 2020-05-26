@@ -31,10 +31,10 @@
 export default {
   name: "DeckSelection",
   created: function () {
-    this.$eventHub.$on("clearDeckSelection", (data) => {
+    this.$eventHub.$on("clearDeckSelection", () => {
       this.setSelectedStateOfAllDecks(false);
     });
-    this.$eventHub.$on("selectAllDecks", (data) => {
+    this.$eventHub.$on("selectAllDecks", () => {
       this.setSelectedStateOfAllDecks(true);
     });
   },

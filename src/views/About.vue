@@ -5,7 +5,7 @@
         <v-col cols="10">
           <span class="title">Fancy Flashcard</span>
           <br>
-          &copy; {{ new Date().getFullYear() }} Niko Lockenvitz &amp; Rene-Pascal Fischer
+          <span>&copy; {{ new Date().getFullYear() }} Niko Lockenvitz &amp; Rene-Pascal Fischer</span>
           <br>
           <a href="https://github.com/dhbw-ffc/ffc">https://github.com/dhbw-ffc/ffc</a>
         </v-col>
