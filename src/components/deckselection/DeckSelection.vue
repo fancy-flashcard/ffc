@@ -2,60 +2,50 @@
   <div class="DeckSelection">
     <v-subheader>Decks</v-subheader>
     <v-list>
-      <v-list-item-group multiple color="indigo">
+      <v-list-item-group multiple color="indigo" v-model="deckModel">
         <v-list-item
           v-for="deck in decks"
           :key="deck.id"
-          v-model="deck.selected"
+          :value="deck.id"
+          :id="deck.id"
         >
           <v-list-item-content>
             <v-list-item-title v-text="deck.deckname"></v-list-item-title>
           </v-list-item-content>
-          <v-list-item-icon v-bind:class="{ hidden: getNumberOfSelectedDecks()===0, visible: getNumberOfSelectedDecks()>0 }">
+          <v-list-item-icon v-bind:class="{ hidden: numberOfSelectedDecks===0, visible: numberOfSelectedDecks>0 }">
             <v-icon v-if="deck.selected">mdi-check-box-outline</v-icon>
             <v-icon v-else>mdi-checkbox-blank-outline</v-icon>
           </v-list-item-icon>
         </v-list-item>
       </v-list-item-group>
     </v-list>
-
     <v-btn class="mx-2" fab dark color="indigo">
-      <v-icon v-if="getNumberOfSelectedDecks()>0" class="rotate-90">mdi-navigation</v-icon>
-      <v-icon v-else>mdi-plus</v-icon>
+      <v-icon
+        v-text="numberOfSelectedDecks === 0 ? 'mdi-plus' : 'mdi-navigation'"
+        :class="{ 'rotate-90': numberOfSelectedDecks > 0 }" />
     </v-btn>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "DeckSelection",
-  created: function () {
-    this.$eventHub.$on("clearDeckSelection", () => {
-      this.setSelectedStateOfAllDecks(false);
-    });
-    this.$eventHub.$on("selectAllDecks", () => {
-      this.setSelectedStateOfAllDecks(true);
-    });
-  },
   props: {
-    decks: Array
+    decks: Array,
+    numberOfSelectedDecks: Number,
   },
-  methods: {
-    getNumberOfSelectedDecks () {
-      let numberOfSelectedDecks = 0;
-      for (let deck of this.decks) {
-        if (deck.selected) numberOfSelectedDecks++;
+  computed: {
+    deckModel: {
+      get () {
+        return this.decks.map((deck) => deck.selected ? deck.id : undefined).filter((id) => id !== undefined);
+      },
+      set (newModel) {
+        this.decks.forEach((deck) => {
+          deck.selected = newModel.includes(deck.id);
+        });
       }
-      this.$eventHub.$emit("numberOfSelectedDecks", numberOfSelectedDecks);
-      return numberOfSelectedDecks;
-    },
-    setSelectedStateOfAllDecks (state) {
-      for (let deck of this.decks) {
-        deck.selected = state;
-      }
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="deckselection">
-    <DeckSelection v-bind:decks="decks"></DeckSelection>
+    <DeckSelection v-bind:decks="decks" v-bind:numberOfSelectedDecks="numberOfSelectedDecks"></DeckSelection>
   </div>
 </template>
 
@@ -8,22 +8,15 @@
 import DeckSelection from '../components/deckselection/DeckSelection.vue'
 export default {
   name: 'App',
+  props: {
+    decks: Array,
+    numberOfSelectedDecks: Number
+  },
+  computed: {
+    
+  },
   components: {
     DeckSelection
-  },
-  data() {
-    return {
-      decks: [
-        {
-          id: 1,
-          deckname: "Test1"
-        },
-        {
-          id: 2,
-          deckname: "Test2"
-        }
-      ]
-    };
   },
 }
 </script>
