@@ -29,6 +29,11 @@ export default {
   components: {
     NavigationBar
   },
+  created() {
+    this.$eventHub.$on("deleteDecks", (decksToBeDeleted) => {
+      this.decks = this.decks.filter((deck) => !decksToBeDeleted.includes(deck.id));
+    });
+  },
   data() {
     return {
       decks: [
@@ -88,6 +93,8 @@ html,
 body {
   /* apply dark mode to scrollbar in firefox desktop */
   background-color: #000;
+  /* remove scrollbar on desktop when not needed */
+  overflow-y: auto !important;
 }
 
 #app {

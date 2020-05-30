@@ -1,7 +1,7 @@
 <template>
   <div class="DeckSelection">
     <v-subheader>Decks</v-subheader>
-    <v-list>
+    <v-list v-if="decks.length > 0">
       <v-list-item-group multiple color="indigo" v-model="deckModel">
         <v-list-item
           v-for="deck in decks"
@@ -19,20 +19,54 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <v-btn class="mx-2" fab dark color="indigo">
+    <p v-else id="no-decks-yet-notice">
+      You don't have any decks yet.
+      You might want to add some by clicking on the button in the bottom right corner.</p>
+    <v-btn class="mx-2 btn-fixed-bottom-right-corner" fab dark color="indigo" @click="onButtonClick">
       <v-icon
         v-text="numberOfSelectedDecks === 0 ? 'mdi-plus' : 'mdi-navigation'"
         :class="{ 'rotate-90': numberOfSelectedDecks > 0 }" />
     </v-btn>
+
+    <DialogDeleteDecks
+      ref="confirmDelete"
+      :numberOfSelectedDecks="numberOfSelectedDecks"
+      @confirmed="deleteSelectedDecks"
+    />
+    <DialogDeckInfo
+      ref="info"
+      :deck="selectedDeck"
+    />
   </div>
 </template>
 
 <script>
+import DialogDeleteDecks from "./DialogDeleteDecks.vue";
+import DialogDeckInfo from "./DialogDeckInfo.vue";
+
 export default {
   name: "DeckSelection",
+  components: {
+    DialogDeleteDecks,
+    DialogDeckInfo,
+  },
   props: {
     decks: Array,
     numberOfSelectedDecks: Number,
+  },
+  created() {
+    this.$eventHub.$on("askForConfirmationToDeleteSelectedDecks", () => {
+      this.$refs.confirmDelete.show();
+    });
+    this.$eventHub.$on("showInfoForSelectedDeck", () => {
+      this.$refs.info.show();
+    });
+  },
+  data() {
+    return {
+      showDeleteDialog: false,
+      showInfo: false,
+    };
   },
   computed: {
     deckModel: {
@@ -44,14 +78,30 @@ export default {
           deck.selected = newModel.includes(deck.id);
         });
       }
-    }
-  }
+    },
+    selectedDeck() {
+      return this.deckModel.length !== 1 ? null : this.decks.find((deck) => deck.id === this.deckModel[0]);
+    },
+  },
+  methods: {
+    onButtonClick() {
+      if (this.numberOfSelectedDecks === 0) {
+        this.$router.push('add');
+      } else {
+        // start learning with selected decks
+      }
+    },
+    deleteSelectedDecks() {
+      this.$refs.confirmDelete.hide();
+      this.$eventHub.$emit("deleteDecks", this.deckModel);
+    },
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.v-btn {
+.btn-fixed-bottom-right-corner {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -72,5 +122,9 @@ export default {
   -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
+}
+
+#no-decks-yet-notice {
+  padding: 0 16px;
 }
 </style>

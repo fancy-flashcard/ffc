@@ -47,7 +47,7 @@
         <v-icon>mdi-information</v-icon>
       </v-btn>
 
-      <v-btn icon v-if="numberOfSelectedDecks>0" @click="selectAll">
+      <v-btn icon v-if="numberOfSelectedDecks>0" @click="selectAll" :disabled="numberOfSelectedDecks === decks.length">
         <v-icon>mdi-checkbox-multiple-marked</v-icon>
       </v-btn>
 
@@ -88,10 +88,10 @@ export default {
       });
     },
     deleteSelected() {
-      console.log("delete");
+      this.$eventHub.$emit("askForConfirmationToDeleteSelectedDecks");
     },
     showInfoForSelectedDeck() {
-      console.log("show info");
+      this.$eventHub.$emit("showInfoForSelectedDeck");
     },
     showDrawer() {
       this.primaryDrawer.model = true;
