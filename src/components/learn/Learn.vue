@@ -1,16 +1,14 @@
 <template>
-  <div style="height: 100%;"> <!-- v-if="numberOfSelectedDecks>0"> <!-- otherwise it will be shortly displayed before it is catched by beforeMount -->
-    <div style="height: 100%; display: flex; flex-direction: column;">
-      <v-subheader>{{ card.deckName }}</v-subheader>
-      <div class="max-height">{{ card.q }}</div>
-      <div class="max-height">{{ card.a }}</div>
-      <Rating />
-      <v-card-actions>
-        <v-btn text color="grey lighten-1">Prev</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn text color="grey lighten-1">Next</v-btn>
-      </v-card-actions>
-    </div>
+  <div class="learn" v-if="numberOfSelectedDecks>0"> <!-- otherwise it will be shortly displayed before it is catched by beforeMount -->
+    <v-subheader>{{ card.deckName }}</v-subheader>
+    <div class="max-height">{{ card.q }}</div>
+    <div class="max-height">{{ card.a }}</div>
+    <Rating />
+    <v-card-actions>
+      <v-btn text color="grey lighten-1">Prev</v-btn>
+      <v-spacer></v-spacer>
+      <v-btn text color="grey lighten-1">Next</v-btn>
+    </v-card-actions>
   </div>
 </template>
 
@@ -43,7 +41,7 @@ Morbi tempor quis justo vitae imperdiet.`,
   },
   beforeMount() {
     if (this.numberOfSelectedDecks === 0) {
-      //this.$router.replace("/");
+      this.$router.replace("/");
     }
   },
   methods: {
@@ -67,6 +65,12 @@ Morbi tempor quis justo vitae imperdiet.`,
 </script>
 
 <style scoped>
+.learn {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .max-height {
   display: flex;
   flex-direction: column;
