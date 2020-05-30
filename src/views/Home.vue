@@ -7,7 +7,7 @@
 <script>
 import DeckSelection from '../components/deckselection/DeckSelection.vue'
 export default {
-  name: 'App',
+  name: "Home",
   props: {
     decks: Array,
     numberOfSelectedDecks: Number

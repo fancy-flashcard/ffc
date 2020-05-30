@@ -6,8 +6,14 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Deckselection',
+    name: 'DeckSelection',
     component: () => import('../views/Home.vue'),
+    props: true,
+  },
+  {
+    path: '/learn',
+    name: 'Learn',
+    component: () => import('../views/Learn.vue'),
     props: true,
   },
   {

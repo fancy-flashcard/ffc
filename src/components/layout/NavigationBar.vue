@@ -25,33 +25,35 @@
     <v-app-bar
       :clipped-left="primaryDrawer.clipped"
       app
-      :class="{ 'indigo': numberOfSelectedDecks>0}"
+      :class="colorAppBar"
     >
-      <v-app-bar-nav-icon
-        v-if="numberOfSelectedDecks===0"
-        @click.stop="primaryDrawer.model = !primaryDrawer.model"
-      ></v-app-bar-nav-icon>
-      <v-btn v-else icon @click="deselectAll">
+      <v-btn icon
+        v-if="isInDeckSelection && numberOfSelectedDecks>0"
+        @click="deselectAll"
+      >
         <v-icon>mdi-close</v-icon>
       </v-btn>
+      <v-app-bar-nav-icon v-else
+        @click.stop="primaryDrawer.model = !primaryDrawer.model"
+      ></v-app-bar-nav-icon>
 
       <v-toolbar-title>
-        {{ numberOfSelectedDecks > 0
-        ? `${numberOfSelectedDecks} deck${numberOfSelectedDecks === 1 ? "":"s"} selected`
-        : title }}
+        {{ toolbarTitle }}
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon v-if="numberOfSelectedDecks===1" @click="showInfoForSelectedDeck">
+      <v-btn icon v-if="isInDeckSelection && numberOfSelectedDecks===1" @click="showInfoForSelectedDeck">
         <v-icon>mdi-information</v-icon>
       </v-btn>
 
-      <v-btn icon v-if="numberOfSelectedDecks>0" @click="selectAll" :disabled="numberOfSelectedDecks === decks.length">
+      <v-btn icon v-if="isInDeckSelection && numberOfSelectedDecks>0" @click="selectAll"
+        :disabled="numberOfSelectedDecks === decks.length"
+      >
         <v-icon>mdi-checkbox-multiple-marked</v-icon>
       </v-btn>
 
-      <v-btn icon v-if="numberOfSelectedDecks>0" @click="deleteSelected">
+      <v-btn icon v-if="isInDeckSelection && numberOfSelectedDecks>0" @click="deleteSelected">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
     </v-app-bar>
@@ -76,6 +78,23 @@ export default {
       mini: false
     }
   }),
+  computed: {
+    isInDeckSelection() {
+      return this.$route.name === "DeckSelection"
+    },
+    colorAppBar() {
+      if (this.isInDeckSelection && this.numberOfSelectedDecks > 0) {
+        return "indigo";
+      }
+      return "";
+    },
+    toolbarTitle() {
+      if (this.isInDeckSelection && this.numberOfSelectedDecks > 0) {
+        return `${this.numberOfSelectedDecks} deck${this.numberOfSelectedDecks === 1 ? "":"s"} selected`;
+      }
+      return this.title;
+    },
+  },
   methods: {
     deselectAll() {
       this.decks.forEach(deck => {

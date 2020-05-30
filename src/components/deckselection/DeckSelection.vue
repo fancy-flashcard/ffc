@@ -89,6 +89,7 @@ export default {
         this.$router.push('add');
       } else {
         // start learning with selected decks
+        this.$router.push('learn');
       }
     },
     deleteSelectedDecks() {
