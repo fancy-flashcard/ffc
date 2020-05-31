@@ -79,9 +79,15 @@ export default {
   },
   methods: {
     swipeLeft () {
+      if (this.$route.name === "Learn") {
+        return;
+      }
       this.$refs.navbar.hideDrawer();
     },
     swipeRight () {
+      if (this.$route.name === "Learn") {
+        return;
+      }
       this.$refs.navbar.showDrawer();
     },
   },

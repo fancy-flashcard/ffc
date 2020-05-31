@@ -33,6 +33,12 @@
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
+      <v-btn icon
+        v-else-if="isInLearning"
+        @click="quitLearning"
+      >
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
       <v-app-bar-nav-icon v-else
         @click.stop="primaryDrawer.model = !primaryDrawer.model"
       ></v-app-bar-nav-icon>
@@ -80,7 +86,10 @@ export default {
   }),
   computed: {
     isInDeckSelection() {
-      return this.$route.name === "DeckSelection"
+      return this.$route.name === "DeckSelection";
+    },
+    isInLearning() {
+      return this.$route.name === "Learn";
     },
     colorAppBar() {
       if (this.isInDeckSelection && this.numberOfSelectedDecks > 0) {
@@ -117,7 +126,10 @@ export default {
     },
     hideDrawer() {
       this.primaryDrawer.model = false;
-    }
+    },
+    quitLearning() {
+      this.$eventHub.$emit("askForConfirmationToQuitLearning");
+    },
   }
 };
 </script>

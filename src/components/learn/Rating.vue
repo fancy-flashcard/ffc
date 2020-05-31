@@ -1,29 +1,64 @@
 <template>
   <div class="rating">
-    <svg class="star" v-for="n in 5" :key="n"
-      viewBox="0 0 100 100"
-    >
-      <!-- two circles, radius 18% and 42%, 72 degree steps -->
-      <polygon points="50,10 39.4,35.4 10.1,37 32.9,55.6 25.3,84 50,68, 74.7,84 67.1,55.6 89.9,37 60.6,35.4" />
-    </svg>
+    <div v-for="n in numberOfStars" :key="n" class="star-wrapper">
+      <span class="overline grey--text text--darken-1"
+        :class="{ 'invisible': (n !== 1 && n !== numberOfStars) }"
+      >{{ n === 1 ? "Hard" : "Easy" }}</span>
+      <svg class="star" :class="{ 'filled': (numberOfSelectedStar >= n) }"
+        @click="onClickStar(n)"
+        viewBox="0 0 100 100"
+      >
+        <!-- two circles, radius 18% and 42%, 72 degree steps -->
+        <polygon points="50,10 39.4,35.4 10.1,37 32.9,55.6 25.3,84 50,68, 74.7,84 67.1,55.6 89.9,37 60.6,35.4" />
+      </svg>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
     name: "Rating",
+    props: {
+      numberOfStars: Number,
+    },
+    data() {
+      return {
+        numberOfSelectedStar: 0,
+      }
+    },
+    methods: {
+      onClickStar(n) {
+        this.numberOfSelectedStar = n;
+        this.$emit("rated", n);
+      },
+      setRating(n) {
+        this.numberOfSelectedStar = n;
+        this.$emit("rated", n, true);
+      }
+    },
 }
 </script>
 
 <style scoped>
 .rating {
-  max-height: 20%;
   padding: 0 16px;
   display: flex;
+  justify-content: center;
+}
+
+.star-wrapper {
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 0;
+  max-width: 20vw;
+  max-height: 16vh;
+}
+
+.invisible {
+  visibility: hidden;
 }
 
 svg.star {
-    flex-grow: 1;
     stroke-width: 5;
     stroke-linejoin: round;
 }
