@@ -1,8 +1,9 @@
 <template>
     <v-dialog
       v-model="showQuitDialog"
+      max-width="400"
     >
-      <v-card>
+      <v-card color="#2e2e2e">
         <v-card-title class="headline">Quit Learning?</v-card-title>
 
         <v-card-text class="text-left">
@@ -13,7 +14,7 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            color="grey darken-1"
+            color="grey"
             text
             @click="showQuitDialog = false"
           >

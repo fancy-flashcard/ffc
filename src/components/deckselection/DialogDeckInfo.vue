@@ -1,8 +1,9 @@
 <template>
     <v-dialog
       v-model="showInfo"
+      max-width="400"
     >
-      <v-card>
+      <v-card color="#2e2e2e">
         <v-card-title class="headline">{{deck ? deck.deckname : ""}}</v-card-title>
 
         <v-card-text class="text-left">foo bar ...</v-card-text>
@@ -10,7 +11,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            color="grey darken-1"
+            color="grey"
             text
             @click="showInfo = false"
           >

@@ -1,9 +1,10 @@
 <template>
     <v-dialog
       v-model="showDeleteDialog"
+      max-width="400"
     >
-      <v-card>
-        <v-card-title class="headline">Delete Decks?</v-card-title>
+      <v-card color="#2e2e2e">
+        <v-card-title class="headline">Delete Deck{{numberOfSelectedDecks > 1 ? "s" : ""}}?</v-card-title>
 
         <v-card-text class="text-left">
           Do you really want to delete the {{numberOfSelectedDecks > 1 ? numberOfSelectedDecks + " " : ""}}selected
@@ -13,7 +14,7 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            color="grey darken-1"
+            color="grey"
             text
             @click="showDeleteDialog = false"
           >
