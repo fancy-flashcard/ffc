@@ -59,7 +59,7 @@ Morbi tempor quis justo vitae imperdiet.`,
   },
   created() {
     this.$eventHub.$on("askForConfirmationToQuitLearning", () => {
-      this.$refs.confirmQuit.show();
+      if (this.$refs.confirmQuit) this.$refs.confirmQuit.show();
     });
   },
   beforeMount() {

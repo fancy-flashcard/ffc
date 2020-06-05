@@ -56,10 +56,10 @@ export default {
   },
   created() {
     this.$eventHub.$on("askForConfirmationToDeleteSelectedDecks", () => {
-      this.$refs.confirmDelete.show();
+      if (this.$refs.confirmDelete) this.$refs.confirmDelete.show();
     });
     this.$eventHub.$on("showInfoForSelectedDeck", () => {
-      this.$refs.info.show();
+      if (this.$refs.info) this.$refs.info.show();
     });
   },
   data() {
