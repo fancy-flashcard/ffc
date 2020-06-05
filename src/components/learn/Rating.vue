@@ -5,11 +5,11 @@
         :class="{ 'invisible': (n !== 1 && n !== numberOfStars) }"
       >{{ n === 1 ? "Hard" : "Easy" }}</span>
       <svg class="star" :class="{ 'filled': (numberOfSelectedStar >= n) }"
-        @click="onClickStar(n)"
         viewBox="0 0 100 100"
       >
         <!-- two circles, radius 18% and 42%, 72 degree steps -->
-        <polygon points="50,10 39.4,35.4 10.1,37 32.9,55.6 25.3,84 50,68, 74.7,84 67.1,55.6 89.9,37 60.6,35.4" />
+        <polygon points="50,10 39.4,35.4 10.1,37 32.9,55.6 25.3,84 50,68, 74.7,84 67.1,55.6 89.9,37 60.6,35.4"
+          @click="onClickStar(n)" />
       </svg>
     </div>
   </div>
