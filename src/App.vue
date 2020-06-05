@@ -30,24 +30,16 @@ export default {
     NavigationBar
   },
   created() {
-    this.$eventHub.$on("deleteDecks", (decksToBeDeleted) => {
-      this.decks = this.decks.filter((deck) => !decksToBeDeleted.includes(deck.id));
+    this.$eventHub.$on("deleteDecks", decksToBeDeleted => {
+      this.decks = this.decks.filter(
+        deck => !decksToBeDeleted.includes(deck.id)
+      );
     });
   },
   data() {
     return {
-      decks: [
-        {
-          id: 1,
-          deckname: "Test Deck 1",
-          selected: false
-        },
-        {
-          id: 2,
-          deckname: "Test Deck 2",
-          selected: false
-        }
-      ],
+      saveData: ["decks", "rated"],
+      decks: [],
       navBarList: [
         {
           to: "/",
@@ -69,28 +61,50 @@ export default {
           icon: "mdi-information",
           title: "About"
         }
-      ],
+      ]
     };
+  },
+  updated() {
+    // this.saveData.forEach(item => this.checkStorage(item));
+  },
+  mounted() {
+    localStorage.setItem(
+      "decks",
+      JSON.stringify([
+        { id: 1, deckname: "Test Deck 1", selected: false },
+        { id: 2, deckname: "Test Deck 2", selected: false }
+      ])
+    );
+    this.saveData.forEach(item => this.checkStorage(item));
   },
   computed: {
     numberOfSelectedDecks() {
       return this.decks.filter(deck => deck.selected).length;
-    },
+    }
   },
   methods: {
-    swipeLeft () {
+    swipeLeft() {
       if (this.$route.name === "Learn") {
         return;
       }
       this.$refs.navbar.hideDrawer();
     },
-    swipeRight () {
+    swipeRight() {
       if (this.$route.name === "Learn") {
         return;
       }
       this.$refs.navbar.showDrawer();
     },
-  },
+    checkStorage(key) {
+      if (localStorage.getItem(key)) {
+        try {
+          this[key] = JSON.parse(localStorage.getItem(key));
+        } catch (e) {
+          localStorage.removeItem(key);
+        }
+      }
+    }
+  }
 };
 </script>
 
