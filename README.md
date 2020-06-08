@@ -90,34 +90,39 @@ You can find an example file and a command line interface to create and edit suc
 ### Internal Storing of Decks, Cards and Learning Progress
 ````json
 {
-    "deck_id": {
+    "decks": [{
+        "id": 1,
+        "selected": false,
         "meta": {
             "url": "URL of File",
             "last_updated": "Timestamp of Last Update",
-            "file_meta": {
+            "file": {
                 "author": "Name of the Author",
                 "...": "..."
             },
-            "deck_meta": {
+            "deck": {
                 "short_name": "Short Name of the Deck",
-                "deck_name": "Full Name of the Deck",
+                "name": "Full Name of the Deck",
                 "description": "Description",
                 "next_card_id": 3,
                 "...": "..."
             }
         },
-        "cards": {
-            "0": {
+        "cards": [
+            {
+                "id": 1,
                 "q": "question",
                 "a": "answer",
                 "r": [
-                    { "t": "Timestamp When This Card Has Been Rated", "r": 50 }
+                    { "t": "Timestamp When This Card Has Been Rated", "r": 50 },
+                    { "t": 1590866520000, "r": 99}
                 ]
             },
-            "...": "..."
-        }
+            { "...": "..."}
+        ]
     },
-    "...": "..."
+    { "...": "..."}
+    ]
 }
 ````
 
