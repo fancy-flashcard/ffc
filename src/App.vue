@@ -12,6 +12,12 @@
               v-bind:navBarList="navBarList"
             ></NavigationBar>
             <router-view v-bind:decks="decks" v-bind:numberOfSelectedDecks="numberOfSelectedDecks" />
+            <v-snackbar app v-model="snackbar.snackbar" :timeout="snackbar.timeout">
+              {{ snackbar.text }}
+              <template>
+                <v-btn color="indigo" text @click="snackbar.snackbar = false">Close</v-btn>
+              </template>
+            </v-snackbar>
           </v-content>
         </v-app>
       </v-app>
@@ -21,6 +27,7 @@
 
 <script>
 import NavigationBar from "./components/layout/NavigationBar.vue";
+import ls from "./helpers/localStorageHelper";
 
 export default {
   props: {
@@ -35,10 +42,16 @@ export default {
         deck => !decksToBeDeleted.includes(deck.id)
       );
     });
+    this.$eventHub.$on("addDecksFromFile", fileContent => {
+      this.addDecksFromFile(fileContent);
+    });
+    this.$eventHub.$on("snackbarEvent", output => {
+      this.showSnackbar(output);
+    });
   },
   data() {
     return {
-      saveData: ["decks", "rated"],
+      propertiesToSyncWithLocalStorage: [{ key: "decks", defaultValue: [] }],
       decks: [],
       navBarList: [
         {
@@ -61,21 +74,16 @@ export default {
           icon: "mdi-information",
           title: "About"
         }
-      ]
+      ],
+      snackbar: {
+        text: "",
+        snackbar: false,
+        timeout: 2000
+      }
     };
   },
-  updated() {
-    // this.saveData.forEach(item => this.checkStorage(item));
-  },
   mounted() {
-    localStorage.setItem(
-      "decks",
-      JSON.stringify([
-        { id: 1, deckname: "Test Deck 1", selected: false },
-        { id: 2, deckname: "Test Deck 2", selected: false }
-      ])
-    );
-    this.saveData.forEach(item => this.checkStorage(item));
+    this.readFromLocalStorage();
   },
   computed: {
     numberOfSelectedDecks() {
@@ -95,13 +103,61 @@ export default {
       }
       this.$refs.navbar.showDrawer();
     },
-    checkStorage(key) {
-      if (localStorage.getItem(key)) {
+    showSnackbar(text) {
+      this.snackbar.text = text;
+      this.snackbar.snackbar = true;
+    },
+    readFromLocalStorage() {
+      this.propertiesToSyncWithLocalStorage.forEach(item => {
         try {
-          this[key] = JSON.parse(localStorage.getItem(key));
+          this[item.key] = JSON.parse(ls.get(item.key));
+          if (this[item.key] === null) {
+            throw new Error("No item found.");
+          }
         } catch (e) {
-          localStorage.removeItem(key);
+          this[item.key] = item.defaultValue;
         }
+      });
+    },
+    saveToLocalStorge() {
+      this.propertiesToSyncWithLocalStorage.forEach(item => {
+        ls.set(item.key, JSON.stringify(this[item.key]));
+      });
+    },
+    addDecksFromFile(fileContent) {
+      // TODO: check how many decks and cards were imported -> throw error if none
+      try {
+        fileContent = JSON.parse(fileContent);
+        for (const deckShortName in fileContent.decks) {
+          const cards = [];
+          for (const cardId in fileContent.decks[deckShortName].cards) {
+            cards.push({
+              id: Number(cardId),
+              q: fileContent.decks[deckShortName].cards[cardId].q,
+              a: fileContent.decks[deckShortName].cards[cardId].a,
+              r: []
+            });
+          }
+
+          this.decks.push({
+            id: this.decks.reduce((acc, cur) => Math.max(acc, cur.id), 0) + 1,
+            selected: false,
+            name:
+              fileContent.decks[deckShortName].meta.deck_name || deckShortName,
+            meta: {
+              file: fileContent.meta,
+              deck: {
+                ...fileContent.decks[deckShortName].meta,
+                short_name: deckShortName
+              }
+            },
+            cards
+          });
+        }
+        this.saveToLocalStorge();
+        this.showSnackbar("Imported decks");
+      } catch (e) {
+        this.showSnackbar(e);
       }
     }
   }
@@ -117,10 +173,11 @@ body {
   overflow-y: auto !important;
 }
 
-#app {
-  text-align: center;
+/* reduce margin of file input */
+.deck-input .v-input__control .v-input__slot {
+  margin-bottom: 0;
 }
-.v-list {
-  text-align: left;
+.deck-input .v-input__control .v-text-field__details {
+  display: none;
 }
 </style>
