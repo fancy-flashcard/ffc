@@ -93,9 +93,8 @@ You can find an example file and a command line interface to create and edit suc
     "decks": [{
         "id": 1,
         "selected": false,
+        "name": "Name of the Deck (uses deck_name or deck_short_name as a fallback)",
         "meta": {
-            "url": "URL of File",
-            "last_updated": "Timestamp of Last Update",
             "file": {
                 "author": "Name of the Author",
                 "...": "..."
