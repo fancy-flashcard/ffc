@@ -29,6 +29,8 @@
 import NavigationBar from "./components/layout/NavigationBar.vue";
 import ls from "./helpers/localStorageHelper";
 
+const DEFAULT_SNACKBAR_TIMEOUT = 2000;
+
 export default {
   props: {
     title: String
@@ -47,6 +49,9 @@ export default {
     });
     this.$eventHub.$on("snackbarEvent", output => {
       this.showSnackbar(output);
+    });
+    this.$eventHub.$on("clearLocalStorage", () => {
+      this.clearLocalStorage();
     });
   },
   data() {
@@ -78,7 +83,7 @@ export default {
       snackbar: {
         text: "",
         snackbar: false,
-        timeout: 2000
+        timeout: DEFAULT_SNACKBAR_TIMEOUT,
       }
     };
   },
@@ -103,8 +108,9 @@ export default {
       }
       this.$refs.navbar.showDrawer();
     },
-    showSnackbar(text) {
+    showSnackbar(text, timeout) { // timeout: {value?: number, factor?: number}
       this.snackbar.text = text;
+      this.snackbar.timeout = timeout ? timeout.value || (timeout.factor || 1) * DEFAULT_SNACKBAR_TIMEOUT : DEFAULT_SNACKBAR_TIMEOUT;
       this.snackbar.snackbar = true;
     },
     readFromLocalStorage() {
@@ -123,6 +129,10 @@ export default {
       this.propertiesToSyncWithLocalStorage.forEach(item => {
         ls.set(item.key, JSON.stringify(this[item.key]));
       });
+    },
+    clearLocalStorage () {
+      ls.clearAppData();
+      this.showSnackbar("Removed All App Data From Local Storage. Please Reload To See The Effect.", { factor: 2});
     },
     addDecksFromFile(fileContent) {
       // TODO: check how many decks and cards were imported -> throw error if none
