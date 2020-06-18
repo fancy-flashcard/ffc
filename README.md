@@ -87,6 +87,10 @@ Our first proposal is as follows:
 ````
 You can find an example file and a command line interface to create and edit such files in the [cli folder of this repository](cli).
 
+Such files can be either loaded as a local file or from a URL.
+The latter one can easily be done if CORS headers are present but it might be that not everyone is able to configure this (e.g. static file server).
+See [no-cors.md](no-cors.md) for ideas how Same-origin policy can be bypassed without CORS.
+
 ### Internal Storing of Decks, Cards and Learning Progress
 ````json
 {
