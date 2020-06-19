@@ -18,6 +18,7 @@
                 <v-btn color="indigo" text @click="snackbar.snackbar = false">Close</v-btn>
               </template>
             </v-snackbar>
+            <CustomDialog ref="customDialog" />
           </v-content>
         </v-app>
       </v-app>
@@ -27,7 +28,13 @@
 
 <script>
 import NavigationBar from "./components/layout/NavigationBar.vue";
-import ls from "./helpers/localStorageHelper";
+import CustomDialog from "./components/customdialog/CustomDialog.vue";
+import {
+  readFromLocalStorage,
+  saveToLocalStorage,
+  clearLocalStorage
+} from "./helpers/localStorageHelper";
+import { addDecksFromFile, addDecksFromJSON } from "./helpers/addDecksHelper";
 
 const DEFAULT_SNACKBAR_TIMEOUT = 2000;
 
@@ -36,7 +43,8 @@ export default {
     title: String
   },
   components: {
-    NavigationBar
+    NavigationBar,
+    CustomDialog
   },
   created() {
     this.$eventHub.$on("deleteDecks", decksToBeDeleted => {
@@ -45,14 +53,27 @@ export default {
       );
     });
     this.$eventHub.$on("addDecksFromFile", fileContent => {
-      this.addDecksFromFile(fileContent);
+      addDecksFromFile(this, fileContent);
+    });
+    this.$eventHub.$on("addDecksFromJSON", fileContent => {
+      addDecksFromJSON(this, fileContent);
     });
     this.$eventHub.$on("snackbarEvent", output => {
       this.showSnackbar(output);
     });
     this.$eventHub.$on("clearLocalStorage", () => {
-      this.clearLocalStorage();
+      clearLocalStorage(this);
     });
+
+    for (const item of this.propertiesToSyncWithLocalStorage) {
+      this.$watch(
+        item.key,
+        function() {
+          saveToLocalStorage(this, item);
+        },
+        { deep: true }
+      );
+    }
   },
   data() {
     return {
@@ -83,12 +104,12 @@ export default {
       snackbar: {
         text: "",
         snackbar: false,
-        timeout: DEFAULT_SNACKBAR_TIMEOUT,
+        timeout: DEFAULT_SNACKBAR_TIMEOUT
       }
     };
   },
   mounted() {
-    this.readFromLocalStorage();
+    readFromLocalStorage(this);
   },
   computed: {
     numberOfSelectedDecks() {
@@ -108,68 +129,17 @@ export default {
       }
       this.$refs.navbar.showDrawer();
     },
-    showSnackbar(text, timeout) { // timeout: {value?: number, factor?: number}
+    showSnackbar(text, timeout) {
+      // timeout: {value?: number, factor?: number}
       this.snackbar.text = text;
-      this.snackbar.timeout = timeout ? timeout.value || (timeout.factor || 1) * DEFAULT_SNACKBAR_TIMEOUT : DEFAULT_SNACKBAR_TIMEOUT;
+      this.snackbar.timeout = timeout
+        ? timeout.value || (timeout.factor || 1) * DEFAULT_SNACKBAR_TIMEOUT
+        : DEFAULT_SNACKBAR_TIMEOUT;
       this.snackbar.snackbar = true;
     },
-    readFromLocalStorage() {
-      this.propertiesToSyncWithLocalStorage.forEach(item => {
-        try {
-          this[item.key] = JSON.parse(ls.get(item.key));
-          if (this[item.key] === null) {
-            throw new Error("No item found.");
-          }
-        } catch (e) {
-          this[item.key] = item.defaultValue;
-        }
-      });
+    showCustomDialog (options) {
+      this.$refs.customDialog.show(options);
     },
-    saveToLocalStorge() {
-      this.propertiesToSyncWithLocalStorage.forEach(item => {
-        ls.set(item.key, JSON.stringify(this[item.key]));
-      });
-    },
-    clearLocalStorage () {
-      ls.clearAppData();
-      this.showSnackbar("Removed All App Data From Local Storage. Please Reload To See The Effect.", { factor: 2});
-    },
-    addDecksFromFile(fileContent) {
-      // TODO: check how many decks and cards were imported -> throw error if none
-      try {
-        fileContent = JSON.parse(fileContent);
-        for (const deckShortName in fileContent.decks) {
-          const cards = [];
-          for (const cardId in fileContent.decks[deckShortName].cards) {
-            cards.push({
-              id: Number(cardId),
-              q: fileContent.decks[deckShortName].cards[cardId].q,
-              a: fileContent.decks[deckShortName].cards[cardId].a,
-              r: []
-            });
-          }
-
-          this.decks.push({
-            id: this.decks.reduce((acc, cur) => Math.max(acc, cur.id), 0) + 1,
-            selected: false,
-            name:
-              fileContent.decks[deckShortName].meta.deck_name || deckShortName,
-            meta: {
-              file: fileContent.meta,
-              deck: {
-                ...fileContent.decks[deckShortName].meta,
-                short_name: deckShortName
-              }
-            },
-            cards
-          });
-        }
-        this.saveToLocalStorge();
-        this.showSnackbar("Imported decks");
-      } catch (e) {
-        this.showSnackbar(e);
-      }
-    }
   }
 };
 </script>

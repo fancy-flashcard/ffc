@@ -37,16 +37,17 @@ export default {
     };
   },
   methods: {
-    loadFileFromURL() {
+    async loadFileFromURL() {
       try {
-        throw new Error("Not yet implemented");
-      } catch (e) {
-        this.$eventHub.$emit("snackbarEvent", e);
+        const response = await fetch(this.chosenURL);
+        const fileContent = await response.json();
+        this.$eventHub.$emit("addDecksFromJSON", fileContent);
+      } catch (error) {
+        console.log(error);
+        // TODO: cors?!
+        this.$eventHub.$emit("snackbarEvent", "An Error Occurred While Loading The File");
       }
     },
-    urlPattern() {
-      new RegExp("^https://.*/.*.json$", "g");
-    }
   }
 };
 </script>
