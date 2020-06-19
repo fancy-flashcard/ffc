@@ -17,23 +17,16 @@
       <v-spacer></v-spacer>
       <v-btn text color="grey lighten-1">Next</v-btn>
     </v-card-actions>
-
-    <DialogQuit
-      ref="confirmQuit"
-      @confirmed="confirmedQuit"
-    />
   </div>
 </template>
 
 <script>
 import Rating from './Rating.vue';
-import DialogQuit from './DialogQuit.vue';
 
 export default {
   name: "Learn",
   components: {
     Rating,
-    DialogQuit,
   },
   props: {
     decks: Array,
@@ -57,11 +50,6 @@ Morbi tempor quis justo vitae imperdiet.`,
       },
     };
   },
-  created() {
-    this.$eventHub.$on("askForConfirmationToQuitLearning", () => {
-      if (this.$refs.confirmQuit) this.$refs.confirmQuit.show();
-    });
-  },
   beforeMount() {
     if (this.numberOfSelectedDecks === 0) {
       this.$router.replace("/");
@@ -83,9 +71,6 @@ Morbi tempor quis justo vitae imperdiet.`,
         }
       }
     },
-    confirmedQuit() {
-      this.$router.replace("/");
-    },
   },
   mounted() {
     this.updateVerticalCentering();
@@ -96,11 +81,13 @@ Morbi tempor quis justo vitae imperdiet.`,
 };
 </script>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .learn {
   height: 100%;
   display: flex;
   flex-direction: column;
+  text-align: center;
 }
 
 .max-height {
@@ -112,6 +99,7 @@ Morbi tempor quis justo vitae imperdiet.`,
   align-items: center;
   padding: 0 16px;
 }
+
 .flex-center {
   justify-content: center;
 }

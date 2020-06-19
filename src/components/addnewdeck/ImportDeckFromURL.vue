@@ -43,7 +43,7 @@ export default {
         const fileContent = await response.json();
         this.$eventHub.$emit("addDecksFromJSON", fileContent);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         // TODO: cors?!
         this.$eventHub.$emit("snackbarEvent", "An Error Occurred While Loading The File");
       }

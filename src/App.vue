@@ -15,7 +15,7 @@
             <v-snackbar app v-model="snackbar.snackbar" :timeout="snackbar.timeout">
               {{ snackbar.text }}
               <template>
-                <v-btn color="indigo" text @click="snackbar.snackbar = false">Close</v-btn>
+                <v-btn color="orange darken-1" text @click="snackbar.snackbar = false">Close</v-btn>
               </template>
             </v-snackbar>
             <CustomDialog ref="customDialog" />
@@ -33,8 +33,11 @@ import {
   readFromLocalStorage,
   saveToLocalStorage,
   clearLocalStorage
-} from "./helpers/localStorageHelper";
-import { addDecksFromFile, addDecksFromJSON } from "./helpers/addDecksHelper";
+} from "./helpers/localStorageHelper.js";
+import {
+  addDecksFromFile,
+  addDecksFromJSON
+} from "./helpers/addDecksHelper.js";
 
 const DEFAULT_SNACKBAR_TIMEOUT = 2000;
 
@@ -47,9 +50,9 @@ export default {
     CustomDialog
   },
   created() {
-    this.$eventHub.$on("deleteDecks", decksToBeDeleted => {
+    this.$eventHub.$on("deleteSelectedDecks", () => {
       this.decks = this.decks.filter(
-        deck => !decksToBeDeleted.includes(deck.id)
+        deck => !deck.selected
       );
     });
     this.$eventHub.$on("addDecksFromFile", fileContent => {
@@ -63,6 +66,9 @@ export default {
     });
     this.$eventHub.$on("clearLocalStorage", () => {
       clearLocalStorage(this);
+    });
+    this.$eventHub.$on("showCustomDialog", options => {
+      this.showCustomDialog(options);
     });
 
     for (const item of this.propertiesToSyncWithLocalStorage) {
@@ -137,9 +143,9 @@ export default {
         : DEFAULT_SNACKBAR_TIMEOUT;
       this.snackbar.snackbar = true;
     },
-    showCustomDialog (options) {
+    showCustomDialog(options) {
       this.$refs.customDialog.show(options);
-    },
+    }
   }
 };
 </script>
@@ -151,9 +157,14 @@ body {
   background-color: #000;
   /* remove scrollbar on desktop when not needed */
   overflow-y: auto !important;
+  overscroll-behavior: none;
 }
 
-/* reduce margin of file input */
+.v-card__title {
+  word-break: normal;
+}
+
+/* reduce margin of file/url deck input */
 .deck-input .v-input__control .v-input__slot {
   margin-bottom: 0;
 }
