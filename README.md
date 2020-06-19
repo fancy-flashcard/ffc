@@ -87,37 +87,45 @@ Our first proposal is as follows:
 ````
 You can find an example file and a command line interface to create and edit such files in the [cli folder of this repository](cli).
 
+Such files can be either loaded as a local file or from a URL.
+The latter one can easily be done if CORS headers are present but it might be that not everyone is able to configure this (e.g. static file server).
+See [no-cors.md](no-cors.md) for ideas how Same-origin policy can be bypassed without CORS.
+
 ### Internal Storing of Decks, Cards and Learning Progress
 ````json
 {
-    "deck_id": {
+    "decks": [{
+        "id": 1,
+        "selected": false,
+        "name": "Name of the Deck (uses deck_name or deck_short_name as a fallback)",
         "meta": {
-            "url": "URL of File",
-            "last_updated": "Timestamp of Last Update",
-            "file_meta": {
+            "file": {
                 "author": "Name of the Author",
                 "...": "..."
             },
-            "deck_meta": {
+            "deck": {
                 "short_name": "Short Name of the Deck",
-                "deck_name": "Full Name of the Deck",
+                "name": "Full Name of the Deck",
                 "description": "Description",
                 "next_card_id": 3,
                 "...": "..."
             }
         },
-        "cards": {
-            "0": {
+        "cards": [
+            {
+                "id": 1,
                 "q": "question",
                 "a": "answer",
                 "r": [
-                    { "t": "Timestamp When This Card Has Been Rated", "r": 50 }
+                    { "t": "Timestamp When This Card Has Been Rated", "r": 50 },
+                    { "t": 1590866520000, "r": 99}
                 ]
             },
-            "...": "..."
-        }
+            { "...": "..."}
+        ]
     },
-    "...": "..."
+    { "...": "..."}
+    ]
 }
 ````
 
