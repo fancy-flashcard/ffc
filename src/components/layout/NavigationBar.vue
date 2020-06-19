@@ -29,7 +29,7 @@
       <v-btn icon v-else-if="isInLearning" @click="quitLearning">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
-      <v-app-bar-nav-icon v-else @click.stop="primaryDrawer.model = !primaryDrawer.model"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon v-else @click.stop="togglePrimaryDrawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
 
@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import * as selectedDeckDialogHelper from "../../helpers/selectedDeckDialogHelper.js";
+
 export default {
   name: "NavigationBar",
   props: {
@@ -111,73 +113,10 @@ export default {
       });
     },
     deleteSelected() {
-      let options = {
-        title: `Delete Deck${this.numberOfSelectedDecks > 1 ? "s" : ""}?`,
-        message: `Do you really want to delete the ${
-          this.numberOfSelectedDecks > 1 ? this.numberOfSelectedDecks + " " : ""
-        }selected
-          deck${this.numberOfSelectedDecks > 1 ? "s" : ""}?`,
-        buttons: [
-          {
-            name: "Cancel",
-            color: "grey"
-          },
-          {
-            name: "Delete",
-            color: "red darken-1",
-            callback: () => {
-              this.$eventHub.$emit("deleteSelectedDecks");
-            }
-          }
-        ]
-      };
-      this.$eventHub.$emit("showCustomDialog", options);
+      selectedDeckDialogHelper.deleteSelected(this);
     },
     showInfoForSelectedDeck() {
-      const selectedDeck = this.decks.find(deck => deck.selected);
-      const options = {
-        title: selectedDeck.name,
-        table: [],
-        buttons: [
-          {
-            name: "Close",
-            color: "indigo",
-          }
-        ]
-      };
-      const infos = [
-        {
-          meta: "file",
-          content: [
-            {
-              key: "author",
-              name: "Author"
-            }
-          ]
-        },
-        {
-          meta: "deck",
-          content: [
-            {
-              key: "description",
-              name: "Description"
-            }
-          ]
-        }
-      ];
-      for (const info of infos) {
-        for (const content of info.content) {
-          options.table.push({
-            name: content.name,
-            value: selectedDeck.meta[info.meta][content.key] || "-"
-          });
-        }
-      }
-      options.table.push({
-        name: "Number of Cards",
-        value: selectedDeck.cards.length
-      });
-      this.$eventHub.$emit("showCustomDialog", options);
+      selectedDeckDialogHelper.showInfoForSelectedDeck(this);
     },
     showDrawer() {
       this.primaryDrawer.model = true;
@@ -186,25 +125,11 @@ export default {
       this.primaryDrawer.model = false;
     },
     quitLearning() {
-      this.$eventHub.$emit("showCustomDialog", {
-        title: "Quit Learning?",
-        message: "Do you really want to quit learning? Nevertheless, your progress is saved.",
-        buttons: [
-          {
-            name: "Cancel",
-            color: "grey",
-          },
-          {
-            name: "Quit",
-            color: "orange darken-1",
-            callback: () => {
-              this.deselectAll();
-              this.$router.replace("/");
-            }
-          }
-        ]
-      })
-    }
+      selectedDeckDialogHelper.quitLearning(this);
+    },
+    togglePrimaryDrawer() {
+      this.primaryDrawer.model = !this.primaryDrawer.model
+    },
   }
 };
 </script>
