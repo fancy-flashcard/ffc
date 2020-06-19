@@ -171,4 +171,12 @@ body {
 .deck-input .v-input__control .v-text-field__details {
   display: none;
 }
+
+/* fix highlighting problems in vuetify */
+.theme--dark.v-list-item:hover::before, .theme--dark.v-btn:hover::before, .v-btn:not(.v-btn--text):not(.v-btn--outlined):hover:before{
+  opacity: 0;
+}
+.theme--dark.v-list-item--active:hover::before, .theme--dark.v-list-item--active::before {
+  opacity: 0.24;
+}
 </style>
