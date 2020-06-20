@@ -11,6 +11,10 @@
       overflow
     >
       <v-list>
+        <v-list-item>
+          <v-img src="../../../public/img/flash.svg" class="ffc-icon"></v-img>
+        </v-list-item>
+        <v-divider></v-divider>
         <v-list-item v-for="navItem in navBarList" :key="navItem.to" :to="navItem.to" link>
           <v-list-item-icon>
             <v-icon>{{navItem.icon}}</v-icon>
@@ -128,8 +132,8 @@ export default {
       selectedDeckDialogHelper.quitLearning(this);
     },
     togglePrimaryDrawer() {
-      this.primaryDrawer.model = !this.primaryDrawer.model
-    },
+      this.primaryDrawer.model = !this.primaryDrawer.model;
+    }
   }
 };
 </script>
