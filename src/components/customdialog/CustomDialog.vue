@@ -4,6 +4,7 @@
       <v-card-title class="headline">{{ options.title }}</v-card-title>
 
       <v-card-text v-if="options.message" class="text-left">{{ options.message }}</v-card-text>
+
       <v-list v-if="options.table">
         <v-list-item v-if="options.tableHead">
           <v-list-item-content class="font-weight-bold">{{ options.tableHead.name }}</v-list-item-content>
@@ -14,6 +15,11 @@
           <v-list-item-content>{{ item.value }}</v-list-item-content>
         </v-list-item>
       </v-list>
+
+      <div v-if="options.url" class="share-ffc-url">
+        <v-text-field type="text" id="ffc-url" :value="options.url"></v-text-field>
+      </div>
+
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
@@ -84,7 +90,7 @@ export default {
       if (btn && btn.callback) {
         btn.callback();
       }
-    }
+    },
   }
 };
 </script>
@@ -105,5 +111,9 @@ export default {
 }
 .v-list-item__content {
   padding: 6px 0;
+}
+.share-ffc-url {
+  text-align: center;
+  margin: 0 24px;
 }
 </style>
