@@ -1,3 +1,5 @@
+import { showSnackbar } from './snackbarHelper';
+
 const LOCAL_STORAGE_APP_CONTEXT = "ffc_";
 
 export interface SyncItem {
@@ -47,5 +49,5 @@ export function clearLocalStorage(context: Context) {
   context.propertiesToSyncWithLocalStorage.forEach((item) => {
     context[item.key] = item.defaultValue;
   });
-  context.showSnackbar("Removed All App Data From Local Storage.");
+  showSnackbar(context, "Removed All App Data From Local Storage.");
 }

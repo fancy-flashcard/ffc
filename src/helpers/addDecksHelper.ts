@@ -1,8 +1,8 @@
 import { FFCFile, Deck, CustomDialogOptions } from '@/types';
 import router from '@/router';
+import { showSnackbar } from './snackbarHelper';
 
 interface Context {
-  showSnackbar: Function,
   decks: Deck[],
   showCustomDialog: Function,
   $router: typeof router,
@@ -12,7 +12,7 @@ export function addDecksFromFile(context: Context, fileContent: string) {
   try {
     addDecksFromJSON(context, JSON.parse(fileContent));
   } catch (e) {
-    context.showSnackbar(e);
+    showSnackbar(context, e);
   }
 }
 
@@ -55,7 +55,7 @@ export function addDecksFromJSON(context: Context, fileContent: FFCFile) {
 
     showAddedDecksConfirmation(context, addedDecksAndCards);
   } catch (e) {
-    context.showSnackbar(e);
+    showSnackbar(context, e);
   }
 }
 

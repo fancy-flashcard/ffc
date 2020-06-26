@@ -3,6 +3,7 @@
     <LearnComponent
       :decks="decks"
       :numberOfSelectedDecks="numberOfSelectedDecks"
+      :learningSession="learningSession"
     />
   </div>
 </template>
@@ -14,6 +15,7 @@ export default {
   name: "Learn",
   props: {
     decks: Array,
+    learningSession: Object,
     numberOfSelectedDecks: Number,
   },
   components: {

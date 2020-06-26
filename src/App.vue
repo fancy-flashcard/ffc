@@ -3,23 +3,26 @@
     <v-window :touch="{ left: swipeLeft, right: swipeRight }">
       <v-app id="inspire">
         <v-app id="sandbox">
-          <v-content>
+          <v-main>
             <NavigationBar
               ref="navbar"
               title="Fancy Flashcard"
-              v-bind:decks="decks"
-              v-bind:numberOfSelectedDecks="numberOfSelectedDecks"
-              v-bind:navBarList="navBarList"
+              :decks="decks"
+              :numberOfSelectedDecks="numberOfSelectedDecks"
             ></NavigationBar>
-            <router-view v-bind:decks="decks" v-bind:numberOfSelectedDecks="numberOfSelectedDecks" />
+            <router-view
+              :decks="decks"
+              :numberOfSelectedDecks="numberOfSelectedDecks"
+              :learningSession="learningSession"
+            />
             <v-snackbar app v-model="snackbar.snackbar" :timeout="snackbar.timeout">
               {{ snackbar.text }}
-              <template>
-                <v-btn color="orange darken-1" text @click="snackbar.snackbar = false">Close</v-btn>
+              <template v-slot:action="{ attrs }">
+                <v-btn color="orange darken-1" text v-bind="attrs" @click="snackbar.snackbar = false">Close</v-btn>
               </template>
             </v-snackbar>
             <CustomDialog ref="customDialog" />
-          </v-content>
+          </v-main>
         </v-app>
       </v-app>
     </v-window>
@@ -30,19 +33,16 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { Deck, CustomDialogOptions, FFCFile } from "./types";
+import { Deck, LearningSession, CustomDialogOptions, Event } from "./types";
 
 import NavigationBar from "./components/layout/NavigationBar.vue";
 import CustomDialog from "./components/customdialog/CustomDialog.vue";
+import { registerEventListenerForMainApp } from "./helpers/eventListener";
 import {
   readFromLocalStorage,
   saveToLocalStorage,
-  clearLocalStorage,
-  SyncItem,
+  SyncItem
 } from "./helpers/localStorageHelper";
-import { addDecksFromFile, addDecksFromJSON } from "./helpers/addDecksHelper";
-
-const DEFAULT_SNACKBAR_TIMEOUT = 2000;
 
 const AppProps = Vue.extend({
   props: {
@@ -57,34 +57,18 @@ const AppProps = Vue.extend({
   }
 })
 export default class App extends AppProps {
-  propertiesToSyncWithLocalStorage = [{ key: "decks", defaultValue: [] }] as SyncItem[];
+  propertiesToSyncWithLocalStorage = [
+    { key: "decks", defaultValue: [] },
+    { key: "lerningSession", defaultValue: {} }
+  ] as SyncItem[];
   decks = [] as Deck[];
-  navBarList = [
-    {
-      to: "/",
-      icon: "mdi-home",
-      title: "Home"
-    },
-    {
-      to: "/add",
-      icon: "mdi-plus",
-      title: "Add Deck"
-    },
-    {
-      to: "/settings",
-      icon: "mdi-cog",
-      title: "Settings"
-    },
-    {
-      to: "/about",
-      icon: "mdi-information",
-      title: "About"
-    }
-  ];
+  learningSession = {
+    elements: [{ deckId: 1, cardId: 1, showAnswer: false, rating: 100 }],
+    currentElementIndex: -1
+  } as LearningSession;
   snackbar = {
     text: "",
-    snackbar: false,
-    timeout: DEFAULT_SNACKBAR_TIMEOUT
+    snackbar: false
   };
 
   $refs!: {
@@ -92,25 +76,14 @@ export default class App extends AppProps {
     customDialog: CustomDialog;
   };
 
+  setSelectedStatusForAllDecks(status: boolean) {
+    this.decks.forEach(deck => {
+      deck.selected = status;
+    });
+  }
+
   created() {
-    this.$eventHub.$on("deleteSelectedDecks", () => {
-      this.decks = this.decks.filter(deck => !deck.selected);
-    });
-    this.$eventHub.$on("addDecksFromFile", (fileContent: string) => {
-      addDecksFromFile(this, fileContent);
-    });
-    this.$eventHub.$on("addDecksFromJSON", (fileContent: FFCFile) => {
-      addDecksFromJSON(this, fileContent);
-    });
-    this.$eventHub.$on("snackbarEvent", (message: string) => {
-      this.showSnackbar(message);
-    });
-    this.$eventHub.$on("clearLocalStorage", () => {
-      clearLocalStorage(this);
-    });
-    this.$eventHub.$on("showCustomDialog", (options: CustomDialogOptions) => {
-      this.showCustomDialog(options);
-    });
+    registerEventListenerForMainApp(this);
 
     for (const item of this.propertiesToSyncWithLocalStorage) {
       this.$watch(
@@ -125,9 +98,14 @@ export default class App extends AppProps {
 
   mounted() {
     readFromLocalStorage(this);
-    this.decks.forEach(deck => {
-      deck.selected = false;
-    });
+    if (
+      !this.learningSession.elements ||
+      this.learningSession.elements.length === 0
+    ) {
+      this.setSelectedStatusForAllDecks(false);
+    } else {
+      this.$router.replace("learn");
+    }
   }
 
   get numberOfSelectedDecks() {
@@ -145,14 +123,6 @@ export default class App extends AppProps {
       return;
     }
     this.$refs.navbar.showDrawer();
-  }
-  showSnackbar(text: string, timeout?: { value?: number; factor?: number }) {
-    // timeout: {value?: number, factor?: number}
-    this.snackbar.text = text;
-    this.snackbar.timeout = timeout
-      ? timeout.value || (timeout.factor || 1) * DEFAULT_SNACKBAR_TIMEOUT
-      : DEFAULT_SNACKBAR_TIMEOUT;
-    this.snackbar.snackbar = true;
   }
   showCustomDialog(options: CustomDialogOptions) {
     this.$refs.customDialog.show(options);
