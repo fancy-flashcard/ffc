@@ -10,7 +10,7 @@ interface Context {
   $router: typeof router,
 }
 
-export function deleteSelected(context: Context) {
+export function deleteSelected(context: any) {
   const options = {
     title: `Delete Deck${context.numberOfSelectedDecks > 1 ? "s" : ""}?`,
     message: `Do you really want to delete the ${
@@ -36,8 +36,8 @@ export function deleteSelected(context: Context) {
   context.$eventHub.$emit("showCustomDialog", options);
 }
 
-export function showInfoForSelectedDeck(context: Context) {
-  const selectedDeck = context.decks.find((deck) => deck.selected);
+export function showInfoForSelectedDeck(context: any) {
+  const selectedDeck = context.decks.find((deck: any) => deck.selected);
   const options = {
     title: selectedDeck?.name,
     table: [],
@@ -91,7 +91,7 @@ export function showInfoForSelectedDeck(context: Context) {
 }
 
 
-export function quitLearning(context: Context) {
+export function quitLearning(context: any) {
   context.$eventHub.$emit("showCustomDialog", {
     title: "Quit Learning?",
     message:

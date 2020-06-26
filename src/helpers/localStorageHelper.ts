@@ -1,6 +1,6 @@
 const LOCAL_STORAGE_APP_CONTEXT = "ffc_";
 
-interface SyncItem {
+export interface SyncItem {
   key: string;
   defaultValue: any;
 }

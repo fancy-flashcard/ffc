@@ -37,7 +37,8 @@ import CustomDialog from "./components/customdialog/CustomDialog.vue";
 import {
   readFromLocalStorage,
   saveToLocalStorage,
-  clearLocalStorage
+  clearLocalStorage,
+  SyncItem,
 } from "./helpers/localStorageHelper";
 import { addDecksFromFile, addDecksFromJSON } from "./helpers/addDecksHelper";
 
@@ -56,7 +57,7 @@ const AppProps = Vue.extend({
   }
 })
 export default class App extends AppProps {
-  propertiesToSyncWithLocalStorage = [{ key: "decks", defaultValue: [] }];
+  propertiesToSyncWithLocalStorage = [{ key: "decks", defaultValue: [] }] as SyncItem[];
   decks = [] as Deck[];
   navBarList = [
     {
