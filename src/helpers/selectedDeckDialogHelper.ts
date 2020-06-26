@@ -1,4 +1,16 @@
-export function deleteSelected(context) {
+import Vue from 'vue';
+import { Deck, CustomDialogOptions } from '@/types';
+import router from '@/router';
+
+interface Context {
+  numberOfSelectedDecks: number,
+  $eventHub: typeof Vue,
+  decks: Deck[],
+  deselectAll: Function,
+  $router: typeof router,
+}
+
+export function deleteSelected(context: Context) {
   const options = {
     title: `Delete Deck${context.numberOfSelectedDecks > 1 ? "s" : ""}?`,
     message: `Do you really want to delete the ${
@@ -24,10 +36,10 @@ export function deleteSelected(context) {
   context.$eventHub.$emit("showCustomDialog", options);
 }
 
-export function showInfoForSelectedDeck(context) {
+export function showInfoForSelectedDeck(context: Context) {
   const selectedDeck = context.decks.find((deck) => deck.selected);
   const options = {
-    title: selectedDeck.name,
+    title: selectedDeck?.name,
     table: [],
     buttons: [
       {
@@ -35,7 +47,7 @@ export function showInfoForSelectedDeck(context) {
         color: "indigo",
       },
     ],
-  };
+  } as CustomDialogOptions;
   const infos = [
     {
       meta: "file",
@@ -58,20 +70,28 @@ export function showInfoForSelectedDeck(context) {
   ];
   for (const info of infos) {
     for (const content of info.content) {
-      options.table.push({
-        name: content.name,
-        value: selectedDeck.meta[info.meta][content.key] || "-",
-      });
+      if (info.meta === "file") {
+        options.table?.push({
+          name: content.name,
+          value: selectedDeck?.meta.file[content.key] || "-",
+        });
+      } else if (info.meta === "deck") {
+        options.table?.push({
+          name: content.name,
+          value: selectedDeck?.meta.deck[content.key] || "-",
+        });
+      }
     }
   }
-  options.table.push({
+  options.table?.push({
     name: "Number of Cards",
-    value: selectedDeck.cards.length,
+    value: String(selectedDeck?.cards.length || 0),
   });
   context.$eventHub.$emit("showCustomDialog", options);
 }
 
-export function quitLearning(context) {
+
+export function quitLearning(context: Context) {
   context.$eventHub.$emit("showCustomDialog", {
     title: "Quit Learning?",
     message:

@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { copyToClipboard } from "../helpers/copyToClipboardHelper.js";
+import { copyToClipboard } from "../helpers/copyToClipboardHelper";
 
 export default {
   name: "About",

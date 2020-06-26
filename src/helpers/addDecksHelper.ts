@@ -1,4 +1,14 @@
-export function addDecksFromFile(context, fileContent) {
+import { FFCFile, Deck, CustomDialogOptions } from '@/types';
+import router from '@/router';
+
+interface Context {
+  showSnackbar: Function,
+  decks: Deck[],
+  showCustomDialog: Function,
+  $router: typeof router,
+}
+
+export function addDecksFromFile(context: Context, fileContent: string) {
   try {
     addDecksFromJSON(context, JSON.parse(fileContent));
   } catch (e) {
@@ -6,9 +16,13 @@ export function addDecksFromFile(context, fileContent) {
   }
 }
 
-export function addDecksFromJSON(context, fileContent) {
-  // Following decks have been added: d0 (5 cards), d1 (76 cards)...
-  const addedDecksAndCards = [];
+interface addedDeckAndCards {
+  name: string,
+  numberOfCards: number,
+}
+
+export function addDecksFromJSON(context: Context, fileContent: FFCFile) {
+  const addedDecksAndCards = [] as addedDeckAndCards[];
   try {
     for (const deckShortName in fileContent.decks) {
       const cards = [];
@@ -45,7 +59,7 @@ export function addDecksFromJSON(context, fileContent) {
   }
 }
 
-function showAddedDecksConfirmation(context, addedDecksAndCards) {
+function showAddedDecksConfirmation(context: Context, addedDecksAndCards: addedDeckAndCards[]) {
   const numberOfAddedCards = addedDecksAndCards.reduce(
     (total, deck) => total + deck.numberOfCards,
     0
@@ -61,7 +75,7 @@ function showAddedDecksConfirmation(context, addedDecksAndCards) {
     table: addedDecksAndCards.map((deck) => {
       return {
         name: deck.name,
-        value: deck.numberOfCards,
+        value: String(deck.numberOfCards),
       };
     }),
     buttons: [
@@ -73,6 +87,6 @@ function showAddedDecksConfirmation(context, addedDecksAndCards) {
         },
       },
     ],
-  };
+  } as CustomDialogOptions;
   context.showCustomDialog(options);
 }
