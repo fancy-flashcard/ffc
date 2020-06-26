@@ -63,7 +63,7 @@ Morbi tempor quis justo vitae imperdiet.`,
       }
     },
     updateVerticalCentering() {
-      for (let el of document.getElementsByClassName("max-height")) {
+      for (const el of document.getElementsByClassName("max-height")) {
         if (el.scrollHeight > el.clientHeight) {
           el.classList.remove("flex-center");
         } else {

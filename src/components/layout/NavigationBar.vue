@@ -63,79 +63,83 @@
   </div>
 </template>
 
-<script>
-import * as selectedDeckDialogHelper from "../../helpers/selectedDeckDialogHelper.js";
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
 
-export default {
-  name: "NavigationBar",
+import { Deck } from '../../types';
+
+import * as selectedDeckDialogHelper from "../../helpers/selectedDeckDialogHelper";
+
+const NavigationBarProps = Vue.extend({
   props: {
     title: String,
-    decks: Array,
+    decks: {type: Array as () => Deck[]},
     numberOfSelectedDecks: Number,
     navBarList: Array
-  },
-  data: () => ({
-    primaryDrawer: {
-      model: false,
-      type: "temporary",
-      clipped: true,
-      floating: false,
-      mini: false
-    }
-  }),
-  computed: {
-    isInDeckSelection() {
-      return this.$route.name === "DeckSelection";
-    },
-    isInLearning() {
-      return this.$route.name === "Learn";
-    },
-    colorAppBar() {
-      if (this.isInDeckSelection && this.numberOfSelectedDecks > 0) {
-        return "indigo";
-      }
-      return "";
-    },
-    toolbarTitle() {
-      if (this.isInDeckSelection && this.numberOfSelectedDecks > 0) {
-        return `${this.numberOfSelectedDecks} deck${
-          this.numberOfSelectedDecks === 1 ? "" : "s"
-        } selected`;
-      }
-      return this.title;
-    }
-  },
-  methods: {
-    deselectAll() {
-      this.decks.forEach(deck => {
-        deck.selected = false;
-      });
-    },
-    selectAll() {
-      this.decks.forEach(deck => {
-        deck.selected = true;
-      });
-    },
-    deleteSelected() {
-      selectedDeckDialogHelper.deleteSelected(this);
-    },
-    showInfoForSelectedDeck() {
-      selectedDeckDialogHelper.showInfoForSelectedDeck(this);
-    },
-    showDrawer() {
-      this.primaryDrawer.model = true;
-    },
-    hideDrawer() {
-      this.primaryDrawer.model = false;
-    },
-    quitLearning() {
-      selectedDeckDialogHelper.quitLearning(this);
-    },
-    togglePrimaryDrawer() {
-      this.primaryDrawer.model = !this.primaryDrawer.model;
-    }
   }
-};
+});
+
+@Component
+export default class NavigationBar extends NavigationBarProps {
+  primaryDrawer = {
+    model: false,
+    type: "temporary",
+    clipped: true,
+    floating: false,
+    mini: false
+  };
+
+  get isInDeckSelection() {
+    return this.$route.name === "DeckSelection";
+  }
+  get isInLearning() {
+    return this.$route.name === "Learn";
+  }
+  get colorAppBar() {
+    if (this.isInDeckSelection && this.numberOfSelectedDecks > 0) {
+      return "indigo";
+    }
+    return "";
+  }
+  get toolbarTitle() {
+    if (this.isInDeckSelection && this.numberOfSelectedDecks > 0) {
+      return `${this.numberOfSelectedDecks} deck${
+        this.numberOfSelectedDecks === 1 ? "" : "s"
+      } selected`;
+    }
+    return this.title;
+  }
+
+  deselectAll() {
+    this.decks.forEach(deck => {
+      deck.selected = false;
+    });
+  }
+  selectAll() {
+    this.decks.forEach(deck => {
+      deck.selected = true;
+    });
+  }
+  deleteSelected() {
+    selectedDeckDialogHelper.deleteSelected(this);
+  }
+  showInfoForSelectedDeck() {
+    selectedDeckDialogHelper.showInfoForSelectedDeck(this);
+  }
+  showDrawer() {
+    this.primaryDrawer.model = true;
+  }
+  hideDrawer() {
+    this.primaryDrawer.model = false;
+  }
+  quitLearning() {
+    selectedDeckDialogHelper.quitLearning(this);
+  }
+  togglePrimaryDrawer() {
+    this.primaryDrawer.model = !this.primaryDrawer.model;
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

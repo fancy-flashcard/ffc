@@ -26,48 +26,89 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
+import { Deck, CustomDialogOptions, FFCFile } from "./types";
+
 import NavigationBar from "./components/layout/NavigationBar.vue";
 import CustomDialog from "./components/customdialog/CustomDialog.vue";
 import {
   readFromLocalStorage,
   saveToLocalStorage,
-  clearLocalStorage
-} from "./helpers/localStorageHelper.js";
-import {
-  addDecksFromFile,
-  addDecksFromJSON
-} from "./helpers/addDecksHelper.js";
+  clearLocalStorage,
+  SyncItem,
+} from "./helpers/localStorageHelper";
+import { addDecksFromFile, addDecksFromJSON } from "./helpers/addDecksHelper";
 
 const DEFAULT_SNACKBAR_TIMEOUT = 2000;
 
-export default {
+const AppProps = Vue.extend({
   props: {
     title: String
-  },
+  }
+});
+
+@Component({
   components: {
     NavigationBar,
     CustomDialog
-  },
+  }
+})
+export default class App extends AppProps {
+  propertiesToSyncWithLocalStorage = [{ key: "decks", defaultValue: [] }] as SyncItem[];
+  decks = [] as Deck[];
+  navBarList = [
+    {
+      to: "/",
+      icon: "mdi-home",
+      title: "Home"
+    },
+    {
+      to: "/add",
+      icon: "mdi-plus",
+      title: "Add Deck"
+    },
+    {
+      to: "/settings",
+      icon: "mdi-cog",
+      title: "Settings"
+    },
+    {
+      to: "/about",
+      icon: "mdi-information",
+      title: "About"
+    }
+  ];
+  snackbar = {
+    text: "",
+    snackbar: false,
+    timeout: DEFAULT_SNACKBAR_TIMEOUT
+  };
+
+  $refs!: {
+    navbar: NavigationBar;
+    customDialog: CustomDialog;
+  };
+
   created() {
     this.$eventHub.$on("deleteSelectedDecks", () => {
-      this.decks = this.decks.filter(
-        deck => !deck.selected
-      );
+      this.decks = this.decks.filter(deck => !deck.selected);
     });
-    this.$eventHub.$on("addDecksFromFile", fileContent => {
+    this.$eventHub.$on("addDecksFromFile", (fileContent: string) => {
       addDecksFromFile(this, fileContent);
     });
-    this.$eventHub.$on("addDecksFromJSON", fileContent => {
+    this.$eventHub.$on("addDecksFromJSON", (fileContent: FFCFile) => {
       addDecksFromJSON(this, fileContent);
     });
-    this.$eventHub.$on("snackbarEvent", output => {
-      this.showSnackbar(output);
+    this.$eventHub.$on("snackbarEvent", (message: string) => {
+      this.showSnackbar(message);
     });
     this.$eventHub.$on("clearLocalStorage", () => {
       clearLocalStorage(this);
     });
-    this.$eventHub.$on("showCustomDialog", options => {
+    this.$eventHub.$on("showCustomDialog", (options: CustomDialogOptions) => {
       this.showCustomDialog(options);
     });
 
@@ -80,74 +121,43 @@ export default {
         { deep: true }
       );
     }
-  },
-  data() {
-    return {
-      propertiesToSyncWithLocalStorage: [{ key: "decks", defaultValue: [] }],
-      decks: [],
-      navBarList: [
-        {
-          to: "/",
-          icon: "mdi-home",
-          title: "Home"
-        },
-        {
-          to: "/add",
-          icon: "mdi-plus",
-          title: "Add Deck"
-        },
-        {
-          to: "/settings",
-          icon: "mdi-cog",
-          title: "Settings"
-        },
-        {
-          to: "/about",
-          icon: "mdi-information",
-          title: "About"
-        }
-      ],
-      snackbar: {
-        text: "",
-        snackbar: false,
-        timeout: DEFAULT_SNACKBAR_TIMEOUT
-      }
-    };
-  },
+  }
+
   mounted() {
     readFromLocalStorage(this);
-  },
-  computed: {
-    numberOfSelectedDecks() {
-      return this.decks.filter(deck => deck.selected).length;
-    }
-  },
-  methods: {
-    swipeLeft() {
-      if (this.$route.name === "Learn") {
-        return;
-      }
-      this.$refs.navbar.hideDrawer();
-    },
-    swipeRight() {
-      if (this.$route.name === "Learn") {
-        return;
-      }
-      this.$refs.navbar.showDrawer();
-    },
-    showSnackbar(text, timeout) {
-      // timeout: {value?: number, factor?: number}
-      this.snackbar.text = text;
-      this.snackbar.timeout = timeout
-        ? timeout.value || (timeout.factor || 1) * DEFAULT_SNACKBAR_TIMEOUT
-        : DEFAULT_SNACKBAR_TIMEOUT;
-      this.snackbar.snackbar = true;
-    },
-    showCustomDialog(options) {
-      this.$refs.customDialog.show(options);
-    }
+    this.decks.forEach(deck => {
+      deck.selected = false;
+    });
   }
-};
+
+  get numberOfSelectedDecks() {
+    return this.decks.filter(deck => deck.selected).length;
+  }
+
+  swipeLeft() {
+    if (this.$route.name === "Learn") {
+      return;
+    }
+    this.$refs.navbar.hideDrawer();
+  }
+  swipeRight() {
+    if (this.$route.name === "Learn") {
+      return;
+    }
+    this.$refs.navbar.showDrawer();
+  }
+  showSnackbar(text: string, timeout?: { value?: number; factor?: number }) {
+    // timeout: {value?: number, factor?: number}
+    this.snackbar.text = text;
+    this.snackbar.timeout = timeout
+      ? timeout.value || (timeout.factor || 1) * DEFAULT_SNACKBAR_TIMEOUT
+      : DEFAULT_SNACKBAR_TIMEOUT;
+    this.snackbar.snackbar = true;
+  }
+  showCustomDialog(options: CustomDialogOptions) {
+    this.$refs.customDialog.show(options);
+  }
+}
 </script>
 
 <style>
@@ -173,10 +183,13 @@ body {
 }
 
 /* fix highlighting problems in vuetify */
-.theme--dark.v-list-item:hover::before, .theme--dark.v-btn:hover::before, .v-btn:not(.v-btn--text):not(.v-btn--outlined):hover:before{
+.theme--dark.v-list-item:hover::before,
+.theme--dark.v-btn:hover::before,
+.v-btn:not(.v-btn--text):not(.v-btn--outlined):hover:before {
   opacity: 0;
 }
-.theme--dark.v-list-item--active:hover::before, .theme--dark.v-list-item--active::before {
+.theme--dark.v-list-item--active:hover::before,
+.theme--dark.v-list-item--active::before {
   opacity: 0.24;
 }
 </style>

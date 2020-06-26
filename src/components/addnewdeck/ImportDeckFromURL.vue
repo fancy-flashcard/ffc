@@ -27,7 +27,7 @@ export default {
   name: "ImportDeckFromURL",
   data() {
     return {
-      chosenURL: null,
+      chosenURL: "https://raw.githubusercontent.com/fancy-flashcard/ffc/master/cli/test.json",
       fileContent: "",
       urlRules: [
         value =>

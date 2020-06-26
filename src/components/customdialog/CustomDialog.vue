@@ -34,65 +34,63 @@
   </v-dialog>
 </template>
 
-<script>
-export default {
-  name: "Dialog",
-  props: {},
-  data() {
-    return {
-      showDialog: false,
-      options: {
-        title: "",
-        format: "",
-        message: "",
-        tableHead: {
-          name: "",
-          value: ""
-        },
-        table: [
-          {
-            name: "",
-            value: ""
-          }
-        ],
-        buttons: [
-          {
-            name: "Close",
-            color: "indigo",
-            callback: null
-          }
-        ]
-      }
-    };
-  },
-  methods: {
-    hide() {
-      this.showDialog = false;
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+import { CustomDialogOptions, CustomDialogOptionsButton } from "../../types";
+
+@Component
+export default class Dialog extends Vue {
+  showDialog = false;
+  options = {
+    title: "",
+    format: "",
+    message: "",
+    tableHead: {
+      name: "",
+      value: ""
     },
-    show(options) {
-      this.showDialog = true;
-      this.options = options;
-      if (
-        !this.options.buttons ||
-        (this.options.buttons && this.options.buttons.length === 0)
-      ) {
-        this.options.buttons = [
-          {
-            name: "Close",
-            color: "indigo",
-            callback: null
-          }
-        ];
+    table: [
+      {
+        name: "",
+        value: ""
       }
-    },
-    close(btn) {
-      this.showDialog = false;
-      if (btn && btn.callback) {
-        btn.callback();
+    ],
+    buttons: [
+      {
+        name: "Close",
+        color: "indigo",
+        callback: undefined,
       }
-    },
+    ]
+  } as CustomDialogOptions;
+
+  hide() {
+    this.showDialog = false;
   }
-};
+  show(options: CustomDialogOptions) {
+    this.showDialog = true;
+    this.options = options;
+    if (
+      !this.options.buttons ||
+      (this.options.buttons && this.options.buttons.length === 0)
+    ) {
+      this.options.buttons = [
+        {
+          name: "Close",
+          color: "indigo",
+          callback: undefined,
+        }
+      ];
+    }
+  }
+  close(btn?: CustomDialogOptionsButton) {
+    this.showDialog = false;
+    if (btn && btn.callback) {
+      btn.callback();
+    }
+  }
+}
 </script>
 
 <style scoped>
