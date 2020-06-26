@@ -8,7 +8,7 @@
           <v-btn color="indigo" @click="shareApp" class="my-4">Share Fancy Flashcard</v-btn>
 
           <v-footer app>
-            <span class="px-4">
+            <span class="px-4 copyright">
               &copy; {{ new Date().getFullYear() }} Niko Lockenvitz &amp; Rene-Pascal Fischer
               <br />
               <a
@@ -66,5 +66,8 @@ export default {
 <style scoped>
 .about {
   text-align: center;
+}
+.copyright {
+  margin: auto;
 }
 </style>

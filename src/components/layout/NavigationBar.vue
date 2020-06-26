@@ -12,7 +12,7 @@
     >
       <v-list>
         <v-list-item>
-          <v-img src="../../../public/img/flash.svg" class="ffc-icon"></v-img>
+          <v-img src="../../assets/flash.svg" class="ffc-icon"></v-img>
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item v-for="navItem in navBarList" :key="navItem.to" :to="navItem.to" link>
@@ -144,4 +144,10 @@ export default class NavigationBar extends NavigationBarProps {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.ffc-icon {
+  height: 200px;
+}
+.v-list {
+  padding: 0;
+}
 </style>
