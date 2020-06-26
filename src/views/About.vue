@@ -22,45 +22,47 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
+import { Event } from "../types";
 import { copyToClipboard } from "../helpers/copyToClipboardHelper";
 
-export default {
-  name: "About",
-  methods: {
-    shareApp() {
-      if (navigator.share) {
-        navigator
-          .share({
-            title: "Fancy Flashcard",
-            url: "https://fancy-flashcard.github.io/ffc/",
-            text: "Try out this cool app I found."
-          })
-          .then(() => {
-            console.log("Thanks for sharing!");
-          })
-          .catch(console.error);
-      } else {
-        const options = {
-          title: "Share Fancy Flashcard",
+@Component
+export default class About extends Vue {
+  shareApp() {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "Fancy Flashcard",
           url: "https://fancy-flashcard.github.io/ffc/",
-          buttons: [
-            {
-              name: "Close",
-              color: "grey"
-            },
-            {
-              name: "Copy URL",
-              color: "indigo",
-              callback: copyToClipboard
-            }
-          ]
-        };
-        this.$eventHub.$emit("showCustomDialog", options);
-      }
+          text: "Try out this cool app I found."
+        })
+        .then(() => {
+          console.log("Thanks for sharing!");
+        })
+        .catch(console.error);
+    } else {
+      const options = {
+        title: "Share Fancy Flashcard",
+        url: "https://fancy-flashcard.github.io/ffc/",
+        buttons: [
+          {
+            name: "Close",
+            color: "grey"
+          },
+          {
+            name: "Copy URL",
+            color: "indigo",
+            callback: copyToClipboard
+          }
+        ]
+      };
+      this.$eventHub.$emit(Event.SHOW_CUSTOM_DIALOG, options);
     }
   }
-};
+}
 </script>
 
 <style scoped>

@@ -20,38 +20,34 @@
   </v-col>
 </template>
 
-<script>
-export default {
-  name: "ImportDeckFromFile",
-  data() {
-    return {
-      chosenFile: null,
-      fileContent: ""
-    };
-  },
-  methods: {
-    importFile() {
-      const reader = new FileReader();
-      try {
-        if (this.chosenFile === null) {
-          throw new Error("No file chosen.");
-        }
-        if (
-          this.chosenFile.name.substr(this.chosenFile.name.length - 5) !==
-          ".json"
-        ) {
-          throw new Error("Wrong file format!");
-        }
-        reader.readAsText(this.chosenFile);
-        reader.onload = () => {
-          this.$eventHub.$emit("addDecksFromFile", reader.result);
-        };
-      } catch (e) {
-        this.$eventHub.$emit("snackbarEvent", e);
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
+@Component
+export default class ImportDeckFromFile extends Vue {
+  chosenFile: File | null = null;
+  fileContent = "";
+  importFile() {
+    const reader = new FileReader();
+    try {
+      if (this.chosenFile === null) {
+        throw new Error("No file chosen.");
       }
+      if (
+        this.chosenFile.name.substr(this.chosenFile.name.length - 5) !== ".json"
+      ) {
+        throw new Error("Wrong file format!");
+      }
+      reader.readAsText(this.chosenFile);
+      reader.onload = () => {
+        this.$eventHub.$emit("addDecksFromFile", reader.result);
+      };
+    } catch (e) {
+      this.$eventHub.$emit("snackbarEvent", e);
     }
   }
-};
+}
 </script>
 
 <style scoped>

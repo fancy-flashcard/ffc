@@ -4,21 +4,27 @@
   </div>
 </template>
 
-<script>
-import DeckSelection from '../components/deckselection/DeckSelection.vue'
-export default {
-  name: "Home",
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
+import { Deck } from "../types";
+
+import DeckSelection from "../components/deckselection/DeckSelection.vue";
+
+const HomeProps = Vue.extend({
   props: {
-    decks: Array,
+    decks: {type: Array as () => Deck[]},
     numberOfSelectedDecks: Number
-  },
-  computed: {
-    
-  },
+  }
+});
+
+@Component({
   components: {
     DeckSelection
-  },
-}
+  }
+})
+export default class Home extends HomeProps {}
 </script>
 
 <style>

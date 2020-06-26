@@ -4,7 +4,7 @@
     <div class="max-height">{{ card.q }}</div>
     <div class="max-height">
       <span v-if="curLearningElement.showAnswer">{{ card.a }}</span>
-      <v-btn v-else @click="curLearningElement.showAnswer = true">Reveal Answer</v-btn>
+      <v-btn v-else @click="revealAnswer">Reveal Answer</v-btn>
     </div>
 
     <Rating
@@ -32,10 +32,10 @@ import {
   LearningSession,
   LearningSessionElement,
   CardRating,
+  Event,
   QuitLearningReason
 } from "../../types";
 import { injectNewLearningElement } from "../../helpers/cardSelectionHelper";
-import { quitLearning } from "../../helpers/quitLearningDialogHelper";
 
 const LearnProps = Vue.extend({
   props: {
@@ -65,11 +65,16 @@ export default class Learn extends LearnProps {
     ];
     if (!curElement) {
       if (injectNewLearningElement(this.decks, this.learningSession)) {
+        this.learningSession.currentElementIndex =
+          this.learningSession.elements.length - 1;
         curElement = this.learningSession.elements[
           this.learningSession.currentElementIndex
         ];
       } else {
-        this.$eventHub.$emit("quitLearning", QuitLearningReason.NO_MORE_CARDS);
+        this.$eventHub.$emit(
+          Event.QUIT_LEARNING,
+          QuitLearningReason.NO_MORE_CARDS
+        );
         return { deckId: -1, cardId: -1, showAnswer: false, rating: -1 };
       }
     }
@@ -87,6 +92,12 @@ export default class Learn extends LearnProps {
       return { id: -1, q: "", a: "" };
     }
     return card;
+  }
+
+  revealAnswer() {
+    this.learningSession.elements[
+      this.learningSession.currentElementIndex
+    ].showAnswer = true;
   }
 
   onRating(cardRating: CardRating, programmatically = false) {

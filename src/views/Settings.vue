@@ -12,13 +12,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "Settings",
-  methods: {
-    clearLocalStorage() {
-      this.$eventHub.$emit("clearLocalStorage");
-    }
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
+import { Event } from "../types";
+
+@Component
+export default class Settings extends Vue {
+  clearLocalStorage() {
+    this.$eventHub.$emit(Event.CLEAR_LOCAL_STORAGE);
   }
 }
 </script>

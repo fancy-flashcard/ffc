@@ -33,7 +33,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { Deck, LearningSession, CustomDialogOptions, Event } from "./types";
+import { Deck, LearningSession, CustomDialogOptions } from "./types";
 
 import NavigationBar from "./components/layout/NavigationBar.vue";
 import CustomDialog from "./components/customdialog/CustomDialog.vue";
@@ -63,7 +63,7 @@ export default class App extends AppProps {
   ] as SyncItem[];
   decks = [] as Deck[];
   learningSession = {
-    elements: [{ deckId: 1, cardId: 1, showAnswer: false, rating: 100 }],
+    elements: [],
     currentElementIndex: -1
   } as LearningSession;
   snackbar = {

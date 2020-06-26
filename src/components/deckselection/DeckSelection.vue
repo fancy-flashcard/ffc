@@ -36,55 +36,47 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "DeckSelection",
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
+import { Deck } from "../../types";
+
+const DeckSelectionProps = Vue.extend({
   props: {
-    decks: Array,
+    decks: { type: Array as () => Deck[] },
     numberOfSelectedDecks: Number
-  },
-  created() {
-    this.$eventHub.$on("showInfoForSelectedDeck", () => {
-      if (this.$refs.info) this.$refs.info.show();
+  }
+});
+
+@Component
+export default class DeckSelection extends DeckSelectionProps {
+  get deckModel() {
+    return this.decks
+      .map(deck => (deck.selected ? deck.id : undefined))
+      .filter(id => id !== undefined);
+  }
+  set deckModel(newModel) {
+    this.decks.forEach(deck => {
+      deck.selected = newModel.includes(deck.id);
     });
-  },
-  data() {
-    return {
-      showDeleteDialog: false,
-      showInfo: false,
-      showDialog: false
-    };
-  },
-  computed: {
-    deckModel: {
-      get() {
-        return this.decks
-          .map(deck => (deck.selected ? deck.id : undefined))
-          .filter(id => id !== undefined);
-      },
-      set(newModel) {
-        this.decks.forEach(deck => {
-          deck.selected = newModel.includes(deck.id);
-        });
-      }
-    },
-    selectedDeck() {
-      return this.deckModel.length !== 1
-        ? null
-        : this.decks.find(deck => deck.id === this.deckModel[0]);
-    }
-  },
-  methods: {
-    onButtonClick() {
-      if (this.numberOfSelectedDecks === 0) {
-        this.$router.push("add");
-      } else {
-        // start learning with selected decks
-        this.$router.push("learn");
-      }
+  }
+
+  get selectedDeck() {
+    return this.deckModel.length !== 1
+      ? null
+      : this.decks.find(deck => deck.id === this.deckModel[0]);
+  }
+
+  onButtonClick() {
+    if (this.numberOfSelectedDecks === 0) {
+      this.$router.push("add");
+    } else {
+      // start learning with selected decks
+      this.$router.push("learn");
     }
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

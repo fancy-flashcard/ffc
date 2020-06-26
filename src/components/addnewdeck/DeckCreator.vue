@@ -9,10 +9,12 @@
   </v-col>
 </template>
 
-<script>
-export default {
-  name: "DeckCreator"
-};
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
+@Component
+export default class DeckCreator extends Vue {}
 </script>
 
 <style scoped>
