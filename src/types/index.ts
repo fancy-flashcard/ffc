@@ -58,6 +58,7 @@ export interface LearningSessionElement {
   cardId: number;
   showAnswer?: boolean;
   rating?: number;
+  card?: Card;
 }
 
 export interface CustomDialogOptions {

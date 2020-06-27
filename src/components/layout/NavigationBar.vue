@@ -132,7 +132,7 @@ export default class NavigationBar extends NavigationBarProps {
     this.primaryDrawer.model = false;
   }
   quitLearning() {
-    quitLearningDialogHelper.quitLearning(this);
+    quitLearningDialogHelper.quitLearningDialog(this);
   }
   togglePrimaryDrawer() {
     this.primaryDrawer.model = !this.primaryDrawer.model;

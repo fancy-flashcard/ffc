@@ -10,15 +10,16 @@
               :decks="decks"
               :numberOfSelectedDecks="numberOfSelectedDecks"
             ></NavigationBar>
-            <router-view
-              :decks="decks"
-              :numberOfSelectedDecks="numberOfSelectedDecks"
-              :learningSession="learningSession"
-            />
+            <router-view :decks="decks" :numberOfSelectedDecks="numberOfSelectedDecks" />
             <v-snackbar app v-model="snackbar.snackbar" :timeout="snackbar.timeout">
               {{ snackbar.text }}
               <template v-slot:action="{ attrs }">
-                <v-btn color="orange darken-1" text v-bind="attrs" @click="snackbar.snackbar = false">Close</v-btn>
+                <v-btn
+                  color="orange darken-1"
+                  text
+                  v-bind="attrs"
+                  @click="snackbar.snackbar = false"
+                >Close</v-btn>
               </template>
             </v-snackbar>
             <CustomDialog ref="customDialog" />
@@ -33,7 +34,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { Deck, LearningSession, CustomDialogOptions } from "./types";
+import { Deck, CustomDialogOptions } from "./types";
 
 import NavigationBar from "./components/layout/NavigationBar.vue";
 import CustomDialog from "./components/customdialog/CustomDialog.vue";
@@ -58,14 +59,9 @@ const AppProps = Vue.extend({
 })
 export default class App extends AppProps {
   propertiesToSyncWithLocalStorage = [
-    { key: "decks", defaultValue: [] },
-    { key: "lerningSession", defaultValue: {} }
+    { key: "decks", defaultValue: [] }
   ] as SyncItem[];
   decks = [] as Deck[];
-  learningSession = {
-    elements: [],
-    currentElementIndex: -1
-  } as LearningSession;
   snackbar = {
     text: "",
     snackbar: false
@@ -98,14 +94,9 @@ export default class App extends AppProps {
 
   mounted() {
     readFromLocalStorage(this);
-    if (
-      !this.learningSession.elements ||
-      this.learningSession.elements.length === 0
-    ) {
-      this.setSelectedStatusForAllDecks(false);
-    } else {
-      this.$router.replace("learn");
-    }
+    this.setSelectedStatusForAllDecks(false);
+    // TODO: check for active learning session
+    // this.$router.replace("learn");
   }
 
   get numberOfSelectedDecks() {

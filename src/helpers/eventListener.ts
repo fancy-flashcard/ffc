@@ -38,9 +38,9 @@ export function registerEventListenerForMainApp(context: any) {
     }
   );
   context.$eventHub.$on(Event.QUIT_LEARNING, (reason: QuitLearningReason) => {
-    if (reason === QuitLearningReason.USER_ACTION) {
-      context.learningSession = { elements: [], currentElementIndex: -1 };
-      context.$router.replace("/");
+    if (reason === QuitLearningReason.NO_MORE_CARDS) {
+      context.setSelectedStatusForAllDecks(false);
     }
+    context.$router.replace("/");
   });
 }
