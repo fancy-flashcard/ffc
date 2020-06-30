@@ -34,7 +34,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { Deck, CustomDialogOptions } from "./types";
+import { Deck, CustomDialogOptions, Event } from "./types";
 
 import NavigationBar from "./components/layout/NavigationBar.vue";
 import CustomDialog from "./components/customdialog/CustomDialog.vue";
@@ -105,12 +105,14 @@ export default class App extends AppProps {
 
   swipeLeft() {
     if (this.$route.name === "Learn") {
+      this.$eventHub.$emit(Event.SWIPE_LEFT_IN_LEARN);
       return;
     }
     this.$refs.navbar.hideDrawer();
   }
   swipeRight() {
     if (this.$route.name === "Learn") {
+      this.$eventHub.$emit(Event.SWIPE_RIGHT_IN_LEARN);
       return;
     }
     this.$refs.navbar.showDrawer();

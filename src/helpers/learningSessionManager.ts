@@ -1,5 +1,4 @@
 import { Deck, LearningSession, LearningSessionElement } from "@/types";
-import Vue from "vue";
 
 export default class LearningSessionManager {
   decks = [] as Deck[];
@@ -8,19 +7,17 @@ export default class LearningSessionManager {
   learningSession = {} as LearningSession;
 
   constructor(
-    decks: Deck[],
+    selectedDecks: Deck[],
     numberOfRecentCardsToIgnoreWhenSelectingNextCard = -1
   ) {
-    this.decks = decks;
+    this.decks = selectedDecks;
     this.numberOfRecentCardsToIgnoreWhenSelectingNextCard = numberOfRecentCardsToIgnoreWhenSelectingNextCard;
     this.cardsToSelectFrom = [];
 
     this.decks.forEach((deck) => {
-      if (deck.selected) {
-        deck.cards.forEach((card) => {
-          this.cardsToSelectFrom.push({ deckId: deck.id, cardId: card.id });
-        });
-      }
+      deck.cards.forEach((card) => {
+        this.cardsToSelectFrom.push({ deckId: deck.id, cardId: card.id, showAnswer: false, rating: undefined, card: undefined });
+      });
     });
     this.learningSession = { elements: [], currentElementIndex: 0 };
     this.injectNewCard();
@@ -86,6 +83,6 @@ export default class LearningSessionManager {
     const currentLearningSessionElement = this.learningSession.elements[
       this.learningSession.currentElementIndex
     ];
-    Vue.set(currentLearningSessionElement, "showAnswer", true);
+    currentLearningSessionElement.showAnswer = true;
   }
 }

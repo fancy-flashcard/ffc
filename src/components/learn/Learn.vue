@@ -31,7 +31,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import Rating from "./Rating.vue";
-import { Deck, LearningSessionElement, CardRating } from "../../types";
+import { Deck, LearningSessionElement, CardRating, Event } from "../../types";
 import LearningSessionManager from "../../helpers/learningSessionManager";
 
 import { finishLearningDialog } from "../../helpers/finishLearningDialogHelper";
@@ -63,6 +63,15 @@ export default class Learn extends LearnProps {
     }
   } as LearningSessionElement;
 
+  created () {
+    this.$eventHub.$on(Event.SWIPE_LEFT_IN_LEARN, () => {
+      this.moveToNext();
+    });
+    this.$eventHub.$on(Event.SWIPE_RIGHT_IN_LEARN, () => {
+      this.moveToPrev();
+    });
+  }
+
   updateCurLearningElement() {
     this.curLearningElement = this.learningSessionManager.getCurrentLearningSessionElement();
   }
@@ -72,7 +81,9 @@ export default class Learn extends LearnProps {
       this.$router.replace("/");
       return;
     }
-    this.learningSessionManager = new LearningSessionManager(this.decks);
+    this.learningSessionManager = new LearningSessionManager(
+      this.decks.filter(deck => deck.selected)
+    );
     this.updateCurLearningElement();
   }
 
