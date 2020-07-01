@@ -57,7 +57,7 @@ export interface LearningSessionElement {
   deckId: number;
   cardId: number;
   showAnswer?: boolean;
-  rating?: number;
+  rating?: CardRating;
   card?: Card;
 }
 

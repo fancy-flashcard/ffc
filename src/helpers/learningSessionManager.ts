@@ -16,7 +16,13 @@ export default class LearningSessionManager {
 
     this.decks.forEach((deck) => {
       deck.cards.forEach((card) => {
-        this.cardsToSelectFrom.push({ deckId: deck.id, cardId: card.id, showAnswer: false, rating: undefined, card: undefined });
+        this.cardsToSelectFrom.push({
+          deckId: deck.id,
+          cardId: card.id,
+          showAnswer: false,
+          rating: undefined,
+          card: undefined,
+        });
       });
     });
     this.learningSession = { elements: [], currentElementIndex: 0 };
@@ -51,7 +57,7 @@ export default class LearningSessionManager {
     return Math.floor(Math.random() * this.cardsToSelectFrom.length);
   }
 
-  getCurrentLearningSessionElement(): LearningSessionElement {
+  getCurrentLearningSessionElementWithCardDetails(): LearningSessionElement {
     const currentLearningSessionElement = this.learningSession.elements[
       this.learningSession.currentElementIndex
     ];
@@ -84,5 +90,39 @@ export default class LearningSessionManager {
       this.learningSession.currentElementIndex
     ];
     currentLearningSessionElement.showAnswer = true;
+  }
+
+  saveRatingForCurrentLearningSessionElement(rating: number): boolean {
+    const currentLearningSessionElement = this.learningSession.elements[
+      this.learningSession.currentElementIndex
+    ];
+    const t = new Date().getTime();
+    let didOverwriteOldRating = false;
+    const deck = this.decks.find(
+      (deck) => deck.id === currentLearningSessionElement.deckId
+    );
+    const card = deck?.cards.find(
+      (card) => card.id === currentLearningSessionElement.cardId
+    );
+    if (currentLearningSessionElement.rating?.t) {
+      const oldRating = card?.r?.find(
+        (oldRatingObject) =>
+          oldRatingObject.t === currentLearningSessionElement.rating?.t
+      );
+      if (oldRating) {
+        oldRating.t = t;
+        oldRating.r = rating;
+        didOverwriteOldRating = true;
+      }
+    } else {
+      if (card) {
+        if (!Array.isArray(card?.r)) {
+          card.r = [];
+        }
+        card.r.push({ t, r: rating });
+      }
+    }
+    currentLearningSessionElement.rating = { t, r: rating };
+    return Boolean(didOverwriteOldRating);
   }
 }

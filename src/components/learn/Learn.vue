@@ -31,7 +31,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import Rating from "./Rating.vue";
-import { Deck, LearningSessionElement, CardRating, Event } from "../../types";
+import { Deck, LearningSessionElement, Event } from "../../types";
 import LearningSessionManager from "../../helpers/learningSessionManager";
 
 import { finishLearningDialog } from "../../helpers/finishLearningDialogHelper";
@@ -55,7 +55,7 @@ export default class Learn extends LearnProps {
     deckId: 0,
     cardId: 0,
     showAnswer: false,
-    rating: 0,
+    rating: {},
     card: {
       id: 0,
       q: "",
@@ -63,7 +63,11 @@ export default class Learn extends LearnProps {
     }
   } as LearningSessionElement;
 
-  created () {
+  $refs!: {
+    rating: Rating;
+  };
+
+  created() {
     this.$eventHub.$on(Event.SWIPE_LEFT_IN_LEARN, () => {
       this.moveToNext();
     });
@@ -73,7 +77,22 @@ export default class Learn extends LearnProps {
   }
 
   updateCurLearningElement() {
-    this.curLearningElement = this.learningSessionManager.getCurrentLearningSessionElement();
+    this.curLearningElement = this.learningSessionManager.getCurrentLearningSessionElementWithCardDetails();
+    this.updateRatingForCurrentLearningElement();
+  }
+
+  updateRatingForCurrentLearningElement() {
+    let r = 0;
+    if (this.curLearningElement.rating?.r !== undefined) {
+      r =
+        (this.curLearningElement.rating.r * (this.numberOfStarsInRating - 1)) /
+          100 +
+        1; // map 0-100 -> 1-n
+      // rating component is not mounted yet due to re-rendering
+    }
+    this.$nextTick(() => {
+      this.$refs.rating.setRating(r);
+    });
   }
 
   beforeMount() {
@@ -126,10 +145,14 @@ export default class Learn extends LearnProps {
     this.learningSessionManager.revealAnswerForCurrentLearningSessionElement();
   }
 
-  onRating(cardRating: CardRating, programmatically = false) {
-    // TODO: store rating
-    if (programmatically === false) {
-      // TODO: jump to next card
+  onRating(rating: number, programmatically = false) {
+    if (programmatically) return;
+    const r = ((rating - 1) * 100) / (this.numberOfStarsInRating - 1); // map 1-n -> 0-100
+    const oldRatingExisted = this.learningSessionManager.saveRatingForCurrentLearningSessionElement(
+      r
+    );
+    if (!oldRatingExisted) {
+      this.moveToNext();
     }
   }
   updateVerticalCentering() {
