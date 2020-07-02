@@ -88,10 +88,12 @@ export default class Learn extends LearnProps {
         (this.curLearningElement.rating.r * (this.numberOfStarsInRating - 1)) /
           100 +
         1; // map 0-100 -> 1-n
-      // rating component is not mounted yet due to re-rendering
     }
+    // rating component is not mounted yet due to re-rendering
     this.$nextTick(() => {
-      this.$refs.rating.setRating(r);
+      if (this.$refs.rating) {
+        this.$refs.rating.setRating(r);
+      }
     });
   }
 
@@ -148,13 +150,9 @@ export default class Learn extends LearnProps {
   onRating(rating: number, programmatically = false) {
     if (programmatically) return;
     const r = ((rating - 1) * 100) / (this.numberOfStarsInRating - 1); // map 1-n -> 0-100
-    const oldRatingExisted = this.learningSessionManager.saveRatingForCurrentLearningSessionElement(
-      r
-    );
-    if (!oldRatingExisted) {
-      this.moveToNext();
-    }
+    this.learningSessionManager.saveRatingForCurrentLearningSessionElement(r);
   }
+
   updateVerticalCentering() {
     for (const el of document.getElementsByClassName("max-height")) {
       if (el.scrollHeight > el.clientHeight) {
