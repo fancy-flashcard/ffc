@@ -70,12 +70,22 @@ export interface CustomDialogOptions {
     value: string;
   };
   table?: CustomDialogOptionsTableRow[];
+  barChart?: CustomDialogOptionsBarChart;
   buttons?: CustomDialogOptionsButton[];
 }
 
 export interface CustomDialogOptionsTableRow {
   name: string;
   value: string;
+}
+
+export interface CustomDialogOptionsBarChart {
+  bars: CustomDialogOptionsBarChartBar[];
+}
+
+export interface CustomDialogOptionsBarChartBar {
+  name?: string;
+  value: number;
 }
 
 export interface CustomDialogOptionsButton {

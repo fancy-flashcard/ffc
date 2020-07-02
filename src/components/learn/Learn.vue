@@ -84,10 +84,7 @@ export default class Learn extends LearnProps {
   updateRatingForCurrentLearningElement() {
     let r = 0;
     if (this.curLearningElement.rating?.r !== undefined) {
-      r =
-        (this.curLearningElement.rating.r * (this.numberOfStarsInRating - 1)) /
-          100 +
-        1; // map 0-100 -> 1-n
+      r = this.mapRatingFrom100ToStars(this.curLearningElement.rating.r);
     }
     // rating component is not mounted yet due to re-rendering
     this.$nextTick(() => {
@@ -118,7 +115,17 @@ export default class Learn extends LearnProps {
 
   moveToNext() {
     if (this.checkIfCardIsEndOfSession()) {
-      finishLearningDialog(this);
+      const bars = [];
+      for (let rating = 1; rating <= this.numberOfStarsInRating; rating++) {
+        bars.push({ name: `${rating}`, value: 0 });
+      }
+      for (const element of this.learningSessionManager.learningSession
+        .elements) {
+        if (element.rating?.r !== undefined) {
+          bars[this.mapRatingFrom100ToStars(element.rating.r) - 1].value += 1;
+        }
+      }
+      finishLearningDialog(this, bars);
     }
     this.learningSessionManager.moveToNextLearningSessionElement();
     this.updateCurLearningElement();
@@ -149,8 +156,17 @@ export default class Learn extends LearnProps {
 
   onRating(rating: number, programmatically = false) {
     if (programmatically) return;
-    const r = ((rating - 1) * 100) / (this.numberOfStarsInRating - 1); // map 1-n -> 0-100
+    const r = this.mapRatingFromStarsTo100(rating);
     this.learningSessionManager.saveRatingForCurrentLearningSessionElement(r);
+  }
+
+  mapRatingFromStarsTo100(rating: number): number {
+    // map 1-n -> 0-100
+    return ((rating - 1) * 100) / (this.numberOfStarsInRating - 1);
+  }
+  mapRatingFrom100ToStars(rating: number): number {
+    // map 0-100 -> 1-n
+    return (rating * (this.numberOfStarsInRating - 1)) / 100 + 1;
   }
 
   updateVerticalCentering() {
