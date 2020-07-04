@@ -1,9 +1,32 @@
-import { Deck, LearningSession, LearningSessionElement } from "@/types";
+import { Card, Deck, LearningSession, LearningSessionElement } from "@/types";
 
 /* numberOfRecentCardsToIgnoreWhenSelectingNextCard defines when a card can be used again;
  * it's an object where the key defines the rating for which this rule applies and the value
  * says how many other cards need to be used before the card can be used again
  */
+
+const today = new Date().getTime();
+function getCardWeigthBasedOnRecentRatings(card: Card): number {
+  const defaultWeightForUnusedCards = 80;
+  let weight;
+  if (card.r === undefined || card.r.length === 0) {
+    weight = defaultWeightForUnusedCards;
+  } else {
+    const mostRecentCardRating = card.r.reduce(
+      (mostRecentRatingObj, curRatingObj) =>
+        curRatingObj.t > mostRecentRatingObj.t
+          ? curRatingObj
+          : mostRecentRatingObj
+    );
+    // downgrade rating (0-100) by one for each day
+    const daysSinceLastRating =
+      (today - mostRecentCardRating.t) / (1000 * 60 * 60 * 24);
+    const virtualRating = mostRecentCardRating.r - daysSinceLastRating;
+    // map virtual rating to weight
+    weight = Math.max(0, 100 - virtualRating) || 1;
+  }
+  return weight;
+}
 
 export default class LearningSessionManager {
   decks = [] as Deck[];
@@ -31,6 +54,7 @@ export default class LearningSessionManager {
           showAnswer: false,
           rating: undefined,
           card: undefined,
+          weight: getCardWeigthBasedOnRecentRatings(card),
         });
       });
     });
@@ -70,6 +94,19 @@ export default class LearningSessionManager {
   }
 
   getRandomCardIndex(): number {
+    const sumWeights = this.cardsToSelectFrom.reduce(
+      (sum, card) => sum + (card.weight || 0),
+      0
+    );
+    const randomNumberInWeightSumRange = Math.random() * sumWeights;
+    let curWeightSum = 0;
+    for (let index = 0; index < this.cardsToSelectFrom.length; index++) {
+      curWeightSum += this.cardsToSelectFrom[index].weight || 0;
+      if (curWeightSum > randomNumberInWeightSumRange) {
+        return index;
+      }
+    }
+    // if random card selection based on some weighted distribution didn't work, assume even distribution
     return Math.floor(Math.random() * this.cardsToSelectFrom.length);
   }
 
