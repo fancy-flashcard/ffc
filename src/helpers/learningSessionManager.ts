@@ -1,14 +1,23 @@
 import { Deck, LearningSession, LearningSessionElement } from "@/types";
 
+/* numberOfRecentCardsToIgnoreWhenSelectingNextCard defines when a card can be used again;
+ * it's an object where the key defines the rating for which this rule applies and the value
+ * says how many other cards need to be used before the card can be used again
+ */
+
 export default class LearningSessionManager {
   decks = [] as Deck[];
-  numberOfRecentCardsToIgnoreWhenSelectingNextCard = -1;
+  numberOfRecentCardsToIgnoreWhenSelectingNextCard: {
+    [rating: number]: number;
+  } = {};
   cardsToSelectFrom = [] as LearningSessionElement[];
   learningSession = {} as LearningSession;
 
   constructor(
     selectedDecks: Deck[],
-    numberOfRecentCardsToIgnoreWhenSelectingNextCard = -1
+    numberOfRecentCardsToIgnoreWhenSelectingNextCard: {
+      [rating: number]: number;
+    } = {}
   ) {
     this.decks = selectedDecks;
     this.numberOfRecentCardsToIgnoreWhenSelectingNextCard = numberOfRecentCardsToIgnoreWhenSelectingNextCard;
@@ -36,18 +45,25 @@ export default class LearningSessionManager {
     const randomCardIndex = this.getRandomCardIndex();
     this.learningSession.elements.push(this.cardsToSelectFrom[randomCardIndex]);
     this.cardsToSelectFrom.splice(randomCardIndex, 1);
-    if (this.numberOfRecentCardsToIgnoreWhenSelectingNextCard >= 0) {
-      const indexOfCardToBeUsedAgainForSelection =
+
+    for (const ruleRating in this
+      .numberOfRecentCardsToIgnoreWhenSelectingNextCard) {
+      const indexOfCardToBePossiblyUsedAgainForSelection =
         this.learningSession.elements.length -
-        (this.numberOfRecentCardsToIgnoreWhenSelectingNextCard + 1);
-      if (indexOfCardToBeUsedAgainForSelection >= 0) {
+        (this.numberOfRecentCardsToIgnoreWhenSelectingNextCard[
+          Number(ruleRating)
+        ] +
+          1);
+      if (indexOfCardToBePossiblyUsedAgainForSelection >= 0) {
         const cardToBeUsedAgainForSelection = this.learningSession.elements[
-          indexOfCardToBeUsedAgainForSelection
+          indexOfCardToBePossiblyUsedAgainForSelection
         ];
-        this.cardsToSelectFrom.push({
-          deckId: cardToBeUsedAgainForSelection.deckId,
-          cardId: cardToBeUsedAgainForSelection.cardId,
-        });
+        if (cardToBeUsedAgainForSelection.rating?.r === Number(ruleRating)) {
+          this.cardsToSelectFrom.push({
+            deckId: cardToBeUsedAgainForSelection.deckId,
+            cardId: cardToBeUsedAgainForSelection.cardId,
+          });
+        }
       }
     }
     return true;
