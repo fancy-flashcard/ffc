@@ -1,6 +1,6 @@
 <template>
   <div class="bar-chart">
-    <div class="bar-container">
+    <div class="bar-container" :style="{ minHeight: 'min(20vw, 100px)' }">
       <div v-for="(bar, index) in options.bars" :key="index" class="bar-wrapper">
         <div class="bar-value">{{ bar.value }}</div>
         <div class="bar" :style="getHeight(bar)"></div>
@@ -30,7 +30,7 @@ const BarChartProps = Vue.extend({
 @Component
 export default class BarChart extends BarChartProps {
   getHeight(bar: CustomDialogOptionsBarChartBar) {
-    const relValue = bar.value / this.maxBarValue;
+    const relValue = this.maxBarValue > 0 ? bar.value / this.maxBarValue : 0;
     return {
       height: `${relValue*32}vw`,
       maxHeight: `${relValue*150}px`
