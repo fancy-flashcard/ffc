@@ -9,4 +9,12 @@ module.exports = {
       short_name: "FFC",
     },
   },
+  chainWebpack: config => {
+    config
+    .plugin('html')
+    .tap(args => {
+      args[0].title = 'Fancy Flashcard'
+      return args
+    })
+  },
 };

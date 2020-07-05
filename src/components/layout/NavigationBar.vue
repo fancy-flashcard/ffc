@@ -12,7 +12,7 @@
     >
       <v-list>
         <v-list-item>
-          <v-img src="../../../public/img/flash.svg" class="ffc-icon"></v-img>
+          <v-img src="../../assets/flash.svg" class="ffc-icon"></v-img>
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item v-for="navItem in navBarList" :key="navItem.to" :to="navItem.to" link>
@@ -67,16 +67,17 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { Deck } from '../../types';
+import { Deck, Event, NavBarConfigItem } from '../../types';
+import navBarConfigJson from './navbar.json';
 
 import * as selectedDeckDialogHelper from "../../helpers/selectedDeckDialogHelper";
+import * as quitLearningDialogHelper from "../../helpers/quitLearningDialogHelper";
 
 const NavigationBarProps = Vue.extend({
   props: {
     title: String,
     decks: {type: Array as () => Deck[]},
     numberOfSelectedDecks: Number,
-    navBarList: Array
   }
 });
 
@@ -89,6 +90,7 @@ export default class NavigationBar extends NavigationBarProps {
     floating: false,
     mini: false
   };
+  navBarList = navBarConfigJson as NavBarConfigItem[];
 
   get isInDeckSelection() {
     return this.$route.name === "DeckSelection";
@@ -112,14 +114,10 @@ export default class NavigationBar extends NavigationBarProps {
   }
 
   deselectAll() {
-    this.decks.forEach(deck => {
-      deck.selected = false;
-    });
+    this.$eventHub.$emit(Event.DESELECT_ALL_DECKS);
   }
   selectAll() {
-    this.decks.forEach(deck => {
-      deck.selected = true;
-    });
+    this.$eventHub.$emit(Event.SELECT_ALL_DECKS);
   }
   deleteSelected() {
     selectedDeckDialogHelper.deleteSelected(this);
@@ -134,7 +132,7 @@ export default class NavigationBar extends NavigationBarProps {
     this.primaryDrawer.model = false;
   }
   quitLearning() {
-    selectedDeckDialogHelper.quitLearning(this);
+    quitLearningDialogHelper.quitLearningDialog(this);
   }
   togglePrimaryDrawer() {
     this.primaryDrawer.model = !this.primaryDrawer.model;
@@ -144,4 +142,10 @@ export default class NavigationBar extends NavigationBarProps {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.ffc-icon {
+  height: 200px;
+}
+.v-list {
+  padding: 0;
+}
 </style>

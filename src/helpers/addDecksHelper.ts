@@ -1,8 +1,8 @@
 import { FFCFile, Deck, CustomDialogOptions } from '@/types';
 import router from '@/router';
+import { showSnackbar } from './snackbarHelper';
 
 interface Context {
-  showSnackbar: Function,
   decks: Deck[],
   showCustomDialog: Function,
   $router: typeof router,
@@ -12,7 +12,7 @@ export function addDecksFromFile(context: Context, fileContent: string) {
   try {
     addDecksFromJSON(context, JSON.parse(fileContent));
   } catch (e) {
-    context.showSnackbar(e);
+    showSnackbar(context, e);
   }
 }
 
@@ -55,12 +55,12 @@ export function addDecksFromJSON(context: Context, fileContent: FFCFile) {
 
     showAddedDecksConfirmation(context, addedDecksAndCards);
   } catch (e) {
-    context.showSnackbar(e);
+    showSnackbar(context, e);
   }
 }
 
-function showAddedDecksConfirmation(context: Context, addedDecksAndCards: addedDeckAndCards[]) {
-  const numberOfAddedCards = addedDecksAndCards.reduce(
+function showAddedDecksConfirmation(context: Context, addedDeckAndCards: addedDeckAndCards[]) {
+  const numberOfAddedCards = addedDeckAndCards.reduce(
     (total, deck) => total + deck.numberOfCards,
     0
   );
@@ -72,7 +72,7 @@ function showAddedDecksConfirmation(context: Context, addedDecksAndCards: addedD
     title: "Successfully Imported Decks",
     message: "Following decks have been added:",
     tableHead: { name: "Deck", value: "Number of Cards" },
-    table: addedDecksAndCards.map((deck) => {
+    table: addedDeckAndCards.map((deck) => {
       return {
         name: deck.name,
         value: String(deck.numberOfCards),

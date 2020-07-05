@@ -1,0 +1,22 @@
+[
+  {
+    "to": "/",
+    "icon": "mdi-home",
+    "title": "Home"
+  },
+  {
+    "to": "/add",
+    "icon": "mdi-plus",
+    "title": "Add Deck"
+  },
+  {
+    "to": "/settings",
+    "icon": "mdi-cog",
+    "title": "Settings"
+  },
+  {
+    "to": "/about",
+    "icon": "mdi-information",
+    "title": "About"
+  }
+]

@@ -4,17 +4,18 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
 import AddNewDeckComponent from "../components/addnewdeck/AddNewDeck.vue";
 
-export default {
-  name: "AddNewDeck",
-  props: {
-  },
+@Component({
   components: {
     AddNewDeckComponent
   }
-};
+})
+export default class AddNewDeck extends Vue {}
 </script>
 
 <style scoped>

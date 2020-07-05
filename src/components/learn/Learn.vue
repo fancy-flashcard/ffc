@@ -1,84 +1,216 @@
 <template>
-  <div class="learn" v-if="numberOfSelectedDecks>0"> <!-- otherwise it will be shortly displayed before it is catched by beforeMount -->
-    <v-subheader>{{ card.deckName }}<v-spacer />69/420</v-subheader>
-    <div class="max-height">{{ card.q }}</div>
+  <div class="learn" v-if="numberOfSelectedDecks>0">
+    <!-- v-if="numberOfSelectedDecks>0"; otherwise it will be shortly displayed before it is catched by beforeMount -->
+    <div class="max-height">{{ curLearningElement.card.q }}</div>
     <div class="max-height">
-      <span v-if="card.showAnswer">{{ card.a }}</span>
-      <v-btn v-else @click="card.showAnswer = true">Reveal Answer</v-btn>
+      <span v-if="curLearningElement.showAnswer">{{ curLearningElement.card.a }}</span>
+      <v-btn v-else @click="revealAnswer">Reveal Answer</v-btn>
     </div>
 
-    <Rating ref="rating"
-      v-if="card.showAnswer"
+    <Rating
+      ref="rating"
+      v-if="curLearningElement.showAnswer"
       :numberOfStars="numberOfStarsInRating"
       @rated="onRating"
     />
     <v-card-actions>
-      <v-btn text color="grey lighten-1">Prev</v-btn>
+      <v-btn
+        text
+        :disabled="learningSessionManager.learningSession.currentElementIndex === 0"
+        color="grey lighten-1"
+        @click="moveToPrev"
+      >Previous</v-btn>
       <v-spacer></v-spacer>
-      <v-btn text color="grey lighten-1">Next</v-btn>
+      <v-btn text :color="buttonNext.color" @click="moveToNext">{{buttonNext.text}}</v-btn>
     </v-card-actions>
   </div>
 </template>
 
-<script>
-import Rating from './Rating.vue';
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
 
-export default {
-  name: "Learn",
-  components: {
-    Rating,
-  },
+import Rating from "./Rating.vue";
+import {
+  Deck,
+  LearningSessionElement,
+  Event,
+  CustomDialogOptionsBarChartBar
+} from "../../types";
+import LearningSessionManager from "../../helpers/learningSessionManager";
+import FollowUpLearningSessionManager from "../../helpers/followUpLearningSessionManager";
+
+import { finishLearningDialog } from "../../helpers/finishLearningDialogHelper";
+import {
+  saveLearningSessionManagerDataToLocalStorage,
+  getLearningSessionManagerDataFromLocalStorage
+} from "../../helpers/learningSessionStorageHelper";
+
+const LearnProps = Vue.extend({
   props: {
-    decks: Array,
-    numberOfSelectedDecks: Number,
-  },
-  data() {
-    return {
-      numberOfStarsInRating: 5,
-      card: {
-        q: `Lorem ipsum dolor sit amet,
-consectetur adipiscing elit. Quisque id nibh venenatis, ultricies odio et, tristique nulla. Aliquam erat volutpat. Quisque eu sollicitudin tortor. Vestibulum ornare ligula vitae magna suscipit sagittis. In vel mattis quam. Vivamus et tincidunt magna, ac suscipit nisi. Donec semper, dui nec interdum lacinia, arcu nisi fermentum turpis, nec venenatis sem arcu non sem. Phasellus ut ipsum ut ex iaculis elementum nec eu sem.
+    decks: { type: Array as () => Deck[] },
+    numberOfSelectedDecks: Number
+  }
+});
 
-Vivamus ac congue magna. Praesent mollis lacus nec justo porttitor, quis posuere leo vestibulum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc id efficitur arcu. Pellentesque non erat pulvinar, condimentum leo faucibus, scelerisque nulla. Nam massa erat, vehicula non iaculis eu, aliquam sit amet augue. Nam fringilla faucibus justo, at ultricies tellus viverra vel. Maecenas aliquet dictum ex.
-
-Vestibulum ultricies justo eu mattis tincidunt. Phasellus leo quam, pellentesque hendrerit mauris sit amet, faucibus condimentum lacus. Ut sed erat id risus gravida tempus. Aenean id lorem arcu. Curabitur id ante in velit suscipit sagittis. Etiam molestie pretium sapien, ut cursus diam imperdiet quis. Mauris lectus justo, sodales non magna id, sollicitudin euismod nunc. Nunc laoreet eleifend velit eu pellentesque. Vestibulum fringilla, sapien bibendum vulputate feugiat, nisl nunc hendrerit sapien, quis aliquam mauris felis in orci. Donec ac commodo dolor. In tempor sapien erat, sed semper neque ornare a. In hac habitasse platea dictumst.
-Morbi tempor quis justo vitae imperdiet.`,
-        a: "Answer",
-        showAnswer: false,
-        rating: undefined,
-        deckName: "Test Deck 42",
-      },
-    };
-  },
-  beforeMount() {
-    if (this.numberOfSelectedDecks === 0) {
-      this.$router.replace("/");
+@Component({
+  components: {
+    Rating
+  }
+})
+export default class Learn extends LearnProps {
+  numberOfStarsInRating = 5;
+  learningSessionManager = new LearningSessionManager([]);
+  curLearningElement = {
+    deckId: 0,
+    cardId: 0,
+    showAnswer: false,
+    rating: {},
+    card: {
+      id: 0,
+      q: "",
+      a: ""
     }
-  },
-  methods: {
-    onRating(rating, programmatically=false) {
-      // TODO: store rating
-      if (programmatically === false) {
-        // TODO: jump to next card
+  } as LearningSessionElement;
+
+  $refs!: {
+    rating: Rating;
+  };
+
+  created() {
+    this.$eventHub.$on(Event.SWIPE_LEFT_IN_LEARN, () => {
+      this.moveToNext();
+    });
+    this.$eventHub.$on(Event.SWIPE_RIGHT_IN_LEARN, () => {
+      this.moveToPrev();
+    });
+  }
+
+  updateCurLearningElement() {
+    this.curLearningElement = this.learningSessionManager.getCurrentLearningSessionElementWithCardDetails();
+    this.updateRatingForCurrentLearningElement();
+    saveLearningSessionManagerDataToLocalStorage(this.learningSessionManager);
+  }
+
+  updateRatingForCurrentLearningElement() {
+    let r = 0;
+    if (this.curLearningElement.rating?.r !== undefined) {
+      r = this.mapRatingFrom100ToStars(this.curLearningElement.rating.r);
+    }
+    // rating component is not mounted yet due to re-rendering
+    this.$nextTick(() => {
+      if (this.$refs.rating) {
+        this.$refs.rating.setRating(r);
       }
-    },
-    updateVerticalCentering() {
-      for (const el of document.getElementsByClassName("max-height")) {
-        if (el.scrollHeight > el.clientHeight) {
-          el.classList.remove("flex-center");
-        } else {
-          el.classList.add("flex-center");
-        }
+    });
+  }
+
+  beforeMount() {
+    const learningSessionManagerDataInLocalStorage = getLearningSessionManagerDataFromLocalStorage();
+    if (learningSessionManagerDataInLocalStorage) {
+      this.learningSessionManager = new FollowUpLearningSessionManager(
+        learningSessionManagerDataInLocalStorage
+      );
+    } else {
+      if (this.numberOfSelectedDecks === 0) {
+        this.$router.replace("/");
+        return;
       }
-    },
-  },
+      this.learningSessionManager = new LearningSessionManager(
+        this.decks.filter(deck => deck.selected)
+      );
+    }
+    this.updateCurLearningElement();
+  }
+
+  checkIfCardIsEndOfSession(): boolean {
+    return (
+      this.learningSessionManager.learningSession.currentElementIndex ===
+        this.learningSessionManager.learningSession.elements.length - 1 &&
+      this.learningSessionManager.cardsToSelectFrom.length === 0
+    );
+  }
+
+  moveToNext() {
+    if (this.checkIfCardIsEndOfSession()) {
+      this.finishSession();
+    }
+    this.learningSessionManager.moveToNextLearningSessionElement();
+  }
+
+  get buttonNext(): { text: string; color: string } {
+    if (this.checkIfCardIsEndOfSession()) {
+      return {
+        text: "Finish",
+        color: "indigo lighten-1"
+      };
+    } else {
+      return {
+        text: "Next",
+        color: "grey lighten-1"
+      };
+    }
+  }
+
+  moveToPrev() {
+    this.learningSessionManager.moveToPrevLearningSessionElement();
+  }
+
+  revealAnswer() {
+    this.learningSessionManager.revealAnswerForCurrentLearningSessionElement();
+  }
+
+  onRating(rating: number, programmatically = false) {
+    if (programmatically) return;
+    const r = this.mapRatingFromStarsTo100(rating);
+    this.learningSessionManager.saveRatingForCurrentLearningSessionElement(r);
+    saveLearningSessionManagerDataToLocalStorage(this.learningSessionManager);
+  }
+
+  mapRatingFromStarsTo100(rating: number): number {
+    // map 1-n -> 0-100
+    return ((rating - 1) * 100) / (this.numberOfStarsInRating - 1);
+  }
+  mapRatingFrom100ToStars(rating: number): number {
+    // map 0-100 -> 1-n
+    return (rating * (this.numberOfStarsInRating - 1)) / 100 + 1;
+  }
+
+  finishSession() {
+    finishLearningDialog(this, this.getBarsForFinishLearningDialog());
+  }
+
+  getBarsForFinishLearningDialog(): CustomDialogOptionsBarChartBar[] {
+    const bars = [];
+    for (let rating = 1; rating <= this.numberOfStarsInRating; rating++) {
+      bars.push({ name: `${rating}`, value: 0 });
+    }
+    for (const element of this.learningSessionManager.learningSession
+      .elements) {
+      if (element.rating?.r !== undefined) {
+        bars[this.mapRatingFrom100ToStars(element.rating.r) - 1].value += 1;
+      }
+    }
+    return bars;
+  }
+
+  updateVerticalCentering() {
+    for (const el of document.getElementsByClassName("max-height")) {
+      if (el.scrollHeight > el.clientHeight) {
+        el.classList.remove("flex-center");
+      } else {
+        el.classList.add("flex-center");
+      }
+    }
+  }
   mounted() {
     this.updateVerticalCentering();
-  },
+  }
   updated() {
     this.updateVerticalCentering();
-  },
-};
+    this.updateCurLearningElement();
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

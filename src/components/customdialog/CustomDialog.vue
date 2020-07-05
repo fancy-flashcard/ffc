@@ -20,6 +20,8 @@
         <v-text-field type="text" id="ffc-url" :value="options.url"></v-text-field>
       </div>
 
+      <BarChart v-if="options.barChart" :options="options.barChart" />
+
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
@@ -38,8 +40,13 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { CustomDialogOptions, CustomDialogOptionsButton } from "../../types";
+import BarChart from "./BarChart.vue";
 
-@Component
+@Component({
+  components: {
+    BarChart
+  }
+})
 export default class Dialog extends Vue {
   showDialog = false;
   options = {
@@ -60,7 +67,7 @@ export default class Dialog extends Vue {
       {
         name: "Close",
         color: "indigo",
-        callback: undefined,
+        callback: undefined
       }
     ]
   } as CustomDialogOptions;
@@ -79,7 +86,7 @@ export default class Dialog extends Vue {
         {
           name: "Close",
           color: "indigo",
-          callback: undefined,
+          callback: undefined
         }
       ];
     }

@@ -89,26 +89,3 @@ export function showInfoForSelectedDeck(context: any) {
   });
   context.$eventHub.$emit("showCustomDialog", options);
 }
-
-
-export function quitLearning(context: any) {
-  context.$eventHub.$emit("showCustomDialog", {
-    title: "Quit Learning?",
-    message:
-      "Do you really want to quit learning? Nevertheless, your progress is saved.",
-    buttons: [
-      {
-        name: "Cancel",
-        color: "grey"
-      },
-      {
-        name: "Quit",
-        color: "orange darken-1",
-        callback: () => {
-          context.deselectAll();
-          context.$router.replace("/");
-        }
-      }
-    ]
-  });
-}

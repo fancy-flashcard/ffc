@@ -3,23 +3,33 @@
     <LearnComponent
       :decks="decks"
       :numberOfSelectedDecks="numberOfSelectedDecks"
+      :learningSession="learningSession"
     />
   </div>
 </template>
 
-<script>
-import LearnComponent from '../components/learn/Learn.vue';
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
 
-export default {
-  name: "Learn",
+import { Deck, LearningSession } from "../types";
+
+import LearnComponent from "../components/learn/Learn.vue";
+
+const LearnProps = Vue.extend({
   props: {
-    decks: Array,
-    numberOfSelectedDecks: Number,
-  },
+    decks: { type: Array as () => Deck[] },
+    learningSession: { type: Object as () => LearningSession },
+    numberOfSelectedDecks: Number
+  }
+});
+
+@Component({
   components: {
     LearnComponent
   }
-}
+})
+export default class Learn extends LearnProps {}
 </script>
 
 <style scoped>

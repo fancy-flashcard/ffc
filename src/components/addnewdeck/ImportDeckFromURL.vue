@@ -22,34 +22,35 @@
   </v-col>
 </template>
 
-<script>
-export default {
-  name: "ImportDeckFromURL",
-  data() {
-    return {
-      chosenURL: "https://raw.githubusercontent.com/fancy-flashcard/ffc/master/cli/test.json",
-      fileContent: "",
-      urlRules: [
-        value =>
-          new RegExp("^https://.*/.*.json$").exec(value) !== null ||
-          "Please provide a correct URL"
-      ]
-    };
-  },
-  methods: {
-    async loadFileFromURL() {
-      try {
-        const response = await fetch(this.chosenURL);
-        const fileContent = await response.json();
-        this.$eventHub.$emit("addDecksFromJSON", fileContent);
-      } catch (error) {
-        // console.log(error);
-        // TODO: cors?!
-        this.$eventHub.$emit("snackbarEvent", "An Error Occurred While Loading The File");
-      }
-    },
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
+@Component
+export default class ImportDeckFromURL extends Vue {
+  chosenURL =
+    "https://raw.githubusercontent.com/fancy-flashcard/ffc/master/cli/test.json";
+  fileContent = "";
+  urlRules = [
+    (value: string) =>
+      new RegExp("^https://.*/.*.json$").exec(value) !== null ||
+      "Please provide a correct URL"
+  ];
+  async loadFileFromURL() {
+    try {
+      const response = await fetch(this.chosenURL);
+      const fileContent = await response.json();
+      this.$eventHub.$emit("addDecksFromJSON", fileContent);
+    } catch (error) {
+      // console.log(error);
+      // TODO: cors?!
+      this.$eventHub.$emit(
+        "snackbarEvent",
+        "An Error Occurred While Loading The File"
+      );
+    }
   }
-};
+}
 </script>
 
 <style scoped>

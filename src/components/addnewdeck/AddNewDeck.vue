@@ -10,14 +10,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+
 import ImportDeckFromURL from "./ImportDeckFromURL.vue";
 import ImportDeckFromFile from "./ImportDeckFromFile.vue";
 import DeckCreator from "./DeckCreator.vue";
-export default {
-  name: "AddNewDeck",
-  components: { ImportDeckFromURL, ImportDeckFromFile, DeckCreator }
-};
+
+@Component({
+  components: {
+    ImportDeckFromURL,
+    ImportDeckFromFile,
+    DeckCreator
+  }
+})
+export default class AddNewDeck extends Vue {}
 </script>
 
 <style scoped>
