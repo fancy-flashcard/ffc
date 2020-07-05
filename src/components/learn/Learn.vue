@@ -31,10 +31,20 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import Rating from "./Rating.vue";
-import { Deck, LearningSessionElement, Event } from "../../types";
+import {
+  Deck,
+  LearningSessionElement,
+  Event,
+  CustomDialogOptionsBarChartBar
+} from "../../types";
 import LearningSessionManager from "../../helpers/learningSessionManager";
+import FollowUpLearningSessionManager from "../../helpers/followUpLearningSessionManager";
 
 import { finishLearningDialog } from "../../helpers/finishLearningDialogHelper";
+import {
+  saveLearningSessionManagerDataToLocalStorage,
+  getLearningSessionManagerDataFromLocalStorage
+} from "../../helpers/learningSessionStorageHelper";
 
 const LearnProps = Vue.extend({
   props: {
@@ -79,6 +89,7 @@ export default class Learn extends LearnProps {
   updateCurLearningElement() {
     this.curLearningElement = this.learningSessionManager.getCurrentLearningSessionElementWithCardDetails();
     this.updateRatingForCurrentLearningElement();
+    saveLearningSessionManagerDataToLocalStorage(this.learningSessionManager);
   }
 
   updateRatingForCurrentLearningElement() {
@@ -95,13 +106,20 @@ export default class Learn extends LearnProps {
   }
 
   beforeMount() {
-    if (this.numberOfSelectedDecks === 0) {
-      this.$router.replace("/");
-      return;
+    const learningSessionManagerDataInLocalStorage = getLearningSessionManagerDataFromLocalStorage();
+    if (learningSessionManagerDataInLocalStorage) {
+      this.learningSessionManager = new FollowUpLearningSessionManager(
+        learningSessionManagerDataInLocalStorage
+      );
+    } else {
+      if (this.numberOfSelectedDecks === 0) {
+        this.$router.replace("/");
+        return;
+      }
+      this.learningSessionManager = new LearningSessionManager(
+        this.decks.filter(deck => deck.selected)
+      );
     }
-    this.learningSessionManager = new LearningSessionManager(
-      this.decks.filter(deck => deck.selected)
-    );
     this.updateCurLearningElement();
   }
 
@@ -115,20 +133,9 @@ export default class Learn extends LearnProps {
 
   moveToNext() {
     if (this.checkIfCardIsEndOfSession()) {
-      const bars = [];
-      for (let rating = 1; rating <= this.numberOfStarsInRating; rating++) {
-        bars.push({ name: `${rating}`, value: 0 });
-      }
-      for (const element of this.learningSessionManager.learningSession
-        .elements) {
-        if (element.rating?.r !== undefined) {
-          bars[this.mapRatingFrom100ToStars(element.rating.r) - 1].value += 1;
-        }
-      }
-      finishLearningDialog(this, bars);
+      this.finishSession();
     }
     this.learningSessionManager.moveToNextLearningSessionElement();
-    this.updateCurLearningElement();
   }
 
   get buttonNext(): { text: string; color: string } {
@@ -147,7 +154,6 @@ export default class Learn extends LearnProps {
 
   moveToPrev() {
     this.learningSessionManager.moveToPrevLearningSessionElement();
-    this.updateCurLearningElement();
   }
 
   revealAnswer() {
@@ -158,6 +164,7 @@ export default class Learn extends LearnProps {
     if (programmatically) return;
     const r = this.mapRatingFromStarsTo100(rating);
     this.learningSessionManager.saveRatingForCurrentLearningSessionElement(r);
+    saveLearningSessionManagerDataToLocalStorage(this.learningSessionManager);
   }
 
   mapRatingFromStarsTo100(rating: number): number {
@@ -167,6 +174,24 @@ export default class Learn extends LearnProps {
   mapRatingFrom100ToStars(rating: number): number {
     // map 0-100 -> 1-n
     return (rating * (this.numberOfStarsInRating - 1)) / 100 + 1;
+  }
+
+  finishSession() {
+    finishLearningDialog(this, this.getBarsForFinishLearningDialog());
+  }
+
+  getBarsForFinishLearningDialog(): CustomDialogOptionsBarChartBar[] {
+    const bars = [];
+    for (let rating = 1; rating <= this.numberOfStarsInRating; rating++) {
+      bars.push({ name: `${rating}`, value: 0 });
+    }
+    for (const element of this.learningSessionManager.learningSession
+      .elements) {
+      if (element.rating?.r !== undefined) {
+        bars[this.mapRatingFrom100ToStars(element.rating.r) - 1].value += 1;
+      }
+    }
+    return bars;
   }
 
   updateVerticalCentering() {
@@ -183,6 +208,7 @@ export default class Learn extends LearnProps {
   }
   updated() {
     this.updateVerticalCentering();
+    this.updateCurLearningElement();
   }
 }
 </script>

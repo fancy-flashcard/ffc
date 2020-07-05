@@ -1,4 +1,5 @@
 import { Event, QuitLearningReason } from "../types";
+import { clearLearningSessionManagerDataInLocalStorage } from "./learningSessionStorageHelper";
 
 export function quitLearningDialog(context: any) {
   context.$eventHub.$emit("showCustomDialog", {
@@ -18,6 +19,7 @@ export function quitLearningDialog(context: any) {
             Event.QUIT_LEARNING,
             QuitLearningReason.USER_ACTION
           );
+          clearLearningSessionManagerDataInLocalStorage();
         },
       },
     ],

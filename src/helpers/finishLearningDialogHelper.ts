@@ -5,7 +5,12 @@ import {
   CustomDialogOptionsBarChartBar,
 } from "../types";
 
-export function finishLearningDialog(context: any, bars: CustomDialogOptionsBarChartBar[]) {
+import { clearLearningSessionManagerDataInLocalStorage } from "./learningSessionStorageHelper";
+
+export function finishLearningDialog(
+  context: any,
+  bars: CustomDialogOptionsBarChartBar[]
+) {
   const options = {
     title: "Finish Learning?",
     message:
@@ -26,6 +31,7 @@ export function finishLearningDialog(context: any, bars: CustomDialogOptionsBarC
             Event.QUIT_LEARNING,
             QuitLearningReason.NO_MORE_CARDS
           );
+          clearLearningSessionManagerDataInLocalStorage();
         },
       },
     ],

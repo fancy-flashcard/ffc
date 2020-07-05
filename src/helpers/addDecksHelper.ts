@@ -59,8 +59,8 @@ export function addDecksFromJSON(context: Context, fileContent: FFCFile) {
   }
 }
 
-function showAddedDecksConfirmation(context: Context, addedDecksAndCards: addedDeckAndCards[]) {
-  const numberOfAddedCards = addedDecksAndCards.reduce(
+function showAddedDecksConfirmation(context: Context, addedDeckAndCards: addedDeckAndCards[]) {
+  const numberOfAddedCards = addedDeckAndCards.reduce(
     (total, deck) => total + deck.numberOfCards,
     0
   );
@@ -72,7 +72,7 @@ function showAddedDecksConfirmation(context: Context, addedDecksAndCards: addedD
     title: "Successfully Imported Decks",
     message: "Following decks have been added:",
     tableHead: { name: "Deck", value: "Number of Cards" },
-    table: addedDecksAndCards.map((deck) => {
+    table: addedDeckAndCards.map((deck) => {
       return {
         name: deck.name,
         value: String(deck.numberOfCards),

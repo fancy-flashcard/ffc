@@ -44,6 +44,7 @@ import {
   saveToLocalStorage,
   SyncItem
 } from "./helpers/localStorageHelper";
+import continueCurrentLearningSessionIfPresent from "./helpers/continueLearningHelper";
 
 const AppProps = Vue.extend({
   props: {
@@ -95,8 +96,7 @@ export default class App extends AppProps {
   mounted() {
     readFromLocalStorage(this);
     this.setSelectedStatusForAllDecks(false);
-    // TODO: check for active learning session
-    // this.$router.replace("learn");
+    continueCurrentLearningSessionIfPresent(this.$eventHub, this.$router, this.decks);
   }
 
   get numberOfSelectedDecks() {
