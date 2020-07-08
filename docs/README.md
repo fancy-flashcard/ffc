@@ -8,7 +8,7 @@ Please take a look at the documents sorted by topics.
 - [Idea](idea.md)
 - [Architecture](architecture.md)
 - [Technology](technology.md)
-- [Montization](monetization.md)
+- [Monetization](monetization.md)
 - [Backlog](backlog.md)
 
 
@@ -24,7 +24,7 @@ If you have any questions about our ideas, feel free to contact us.
 
 ## Terminology
 Decks can be imported via files.
-Files can be stored locally or accessed online via an URL.
+Files can be stored locally or accessed online via a URL.
 Each file contains multiple decks.
 Each deck is identified by a short name / id (only inside this file).
 It then contains some meta data (full name, description, ...) and multiple cards (questions with corresponding answers), each identified by some incrementing number (the next value is stored in the meta data so that there are no collisions when cards are deleted).
@@ -77,11 +77,11 @@ Our first proposal is as follows:
     }
 }
 ````
-You can find an example file and a command line interface to create and edit such files in the [cli folder of this repository](cli).
+You can find an example file and a command line interface to create and edit such files in the [cli folder of this repository](../cli).
 
 Such files can be either loaded as a local file or from a URL.
 The latter one can easily be done if CORS headers are present but it might be that not everyone is able to configure this (e.g. static file server).
-See [no-cors.md](docs/no-cors.md) for ideas how Same-origin policy can be bypassed without CORS.
+See [no-cors.md](no-cors.md) for ideas how Same-origin policy can be bypassed without CORS.
 
 ## Internal Storing of Decks, Cards and Learning Progress
 ````json
