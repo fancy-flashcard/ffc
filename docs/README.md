@@ -7,10 +7,11 @@ Please take a look at the documents sorted by topics.
 
 - [Idea](idea.md)
 - [Architecture](architecture.md)
+- [Design](design.md)
 - [Technology](technology.md)
 - [Monetization](monetization.md)
+- [Testing](tests.md)
 - [Backlog](backlog.md)
-
 
 ## Introduction
 Of course there are already a lot of flashcard apps, but they all lack a feature we consider very convenient.
@@ -120,4 +121,3 @@ See [no-cors.md](no-cors.md) for ideas how Same-origin policy can be bypassed wi
     ]
 }
 ````
-
