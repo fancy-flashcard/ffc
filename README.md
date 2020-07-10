@@ -40,12 +40,12 @@
 
 ## Screenshots
 
-![Deck Selection](docs/img/deck-selection.png)
-![Deck Selection - one deck selected](docs/img/deck-selection-selected.png)
-![Card](docs/img/q-and-a.png)
-![Evaluation after finishing learning](docs/img/finish.png)
-![Menu](docs/img/menu.png)
-![Import](docs/img/import.png)
+<img src="docs/img/deck-selection.png" alt="Deck Selection" width="200" />
+<img src="docs/img/deck-selection-selected.png" alt="Deck Selection - one deck selected" width="200" />
+<img src="docs/img/q-and-a.png" alt="Card" width="200" />
+<img src="docs/img/finish.png" alt="Evaluation after finishing learning" width="200" />
+<img src="docs/img/menu.png" alt="Menu" width="200" />
+<img src="docs/img/import.png" alt="Import" width="200" />
 
 ## Deployment
 The app is build and deployed to https://fancy-flashcard.github.io/ffc on every push to master branch (via GitHub Actions and GitHub Pages).
