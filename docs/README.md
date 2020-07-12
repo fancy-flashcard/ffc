@@ -2,14 +2,11 @@
 
 ## Table of Contents <!-- omit in toc -->
 
-- [TL;DR](#tldr)
-  - [Introduction](#introduction)
-  - [Terminology](#terminology)
 - [The idea behind Fancy Flashcard](#the-idea-behind-fancy-flashcard)
 - [Architecture](#architecture)
   - [Progressive Web App](#progressive-web-app)
   - [Decentralized persistence](#decentralized-persistence)
-  - [Component based](#component-based)
+  - [Component based UI with Vue.js](#component-based-ui-with-vuejs)
 - [UI Design](#ui-design)
 - [Technology](#technology)
   - [Why Vue?](#why-vue)
@@ -17,6 +14,7 @@
   - [Local Storage for storing data](#local-storage-for-storing-data)
   - [Offline Availability](#offline-availability)
   - [Technical insights and how we did it](#technical-insights-and-how-we-did-it)
+    - [Terminology](#terminology)
     - [Learning Progress and Rating of Cards](#learning-progress-and-rating-of-cards)
     - [Random Card Selection](#random-card-selection)
     - [File Format for External Data Sources](#file-format-for-external-data-sources)
@@ -33,28 +31,6 @@
   - [Some ideas](#some-ideas)
   - [_FFQuiz_ - Fancy FlashQuiz](#ffquiz---fancy-flashquiz)
 
-## TL;DR
-
-### Introduction
-Of course there are already a lot of flashcard apps, but they all lack a feature we consider very convenient.
-The feature we are talking about is using multiple selected card decks in one session without switching between decks manually.
-Our goal with this app is to provide a simple and easy to use [Progressive Web App](https://web.dev/progressive-web-apps/) foundation.
-This foundation consists of a simple storing approach for Q&A-pairs as well as a progression system to support a users learning journey.
-In general we want to make it possible to add/import decks as easy as possible to enable anyone to use the app for their purposes.
-
-To understand how it all works please read this README, we try to cover our every thought.
-If you have any questions about our ideas, feel free to contact us.
-
-### Terminology
-Decks can be imported via files.
-Files can be stored locally or accessed online via a URL.
-Each file contains multiple decks.
-Each deck is identified by a short name / id (only inside this file).
-It then contains some meta data (full name, description, ...) and multiple cards (questions with corresponding answers), each identified by some incrementing number (the next value is stored in the meta data so that there are no collisions when cards are deleted).
-You can find the file format for such files below.
-
-A card (question-answer-pair) is uniquely identified by the data source identifier (e.g. URL where the file is hosted, local filepath, ...), the deck short name / id and the id of the card itself (inside the deck).
-
 ## The idea behind Fancy Flashcard
 
 Flashcards are usually used for learning languages and for that you mostly want to learn only one language at a given time.
@@ -65,6 +41,10 @@ This way you do not have to repeat yourself over and over if you want to mix som
 There is one particular scenario we had in mind: Our finals.
 We have to learn every topic we had lectures on and its simply annoying to create a lot of mixed decks to accomodate for every possible situation.
 That is why we created **Fancy Flashcard (FFC)**.
+
+Our goal with this app is to provide a simple and easy to use [Progressive Web App](https://web.dev/progressive-web-apps/) foundation.
+This foundation consists of a simple storing approach for Q&A-pairs as well as a progression system to support a users learning journey.
+In general we want to make it possible to add/import decks as easy as possible to enable anyone to use the app for their purposes.
 
 FFC originated from the idea of combining the ease of use of index cards and their flexibility.
 With physical index cards you can simply mix the learning decks you want, no matter the topic.
@@ -83,6 +63,9 @@ With FFC we try to give people the opportunity to educate themselves in their ow
 
 To sum it up, FFC is as good as physical index cards but you will not have to carry the cards with you to be able to learn on your commute to school/work or when you have a few minutes of free time and don't know what to do.
 
+To understand how it all works please read this README, we try to cover our every thought.
+If you have any questions about our ideas, feel free to contact us.
+
 ## Architecture
 
 ### [Progressive Web App](https://web.dev/progressive-web-apps/)
@@ -94,13 +77,13 @@ This is simply because [PWAs](https://web.dev/progressive-web-apps/) radically f
 By creating a [PWA](https://web.dev/progressive-web-apps/) we can easily deploy our app on the web and are not forced to offer it on each app store to cater to every mobile user.
 This also allows us to focus on developing more features instead of multiple versions of the same application for each major operating system.
 In addition we are allowed to publish the [PWA](https://web.dev/progressive-web-apps/) to the Google Play Store via the Trusted Web Activity (TWA) API or get it listed in the Apple App Store.
-Apps installed via these stores have the ability to ask the user for more permissions, like displaying a notification.
-Because we did not plan on using notifications or any other special features in our first iterations it is simply unnecessary to invest the time and money ([Google Play Store: $25 one time fee](https://play.google.com/apps/publish/) - [Apple App Store: $99 per year](https://developer.apple.com/programs/how-it-works/)) into getting the app into these stores.
-This may change with time because most users do not know how to install a web app and simple use the respective app stores for finding new apps.
+Apps installed via these stores have the ability to ask the user for more permissions, like accessing certain hardware APIs.
+Because we do not require those and do not have other special features in our first iterations, it is simply unnecessary to invest the time and money ([Google Play Store: $25 one time fee](https://play.google.com/apps/publish/) - [Apple App Store: $99 per year](https://developer.apple.com/programs/how-it-works/)) into getting the app into these stores.
+This may change with time because most users do not know how to install a web app and simply use the respective app stores for finding new apps.
 
 ### Decentralized persistence
 
-To ensure the highest possible level of privacy and data protection we decided for a completely decentralized app and therefore without any dependancy on central servers or their availability.
+To ensure the highest possible level of privacy and data protection we decided for a completely decentralized app and therefore without any dependency on central servers or their availability.
 That means all learning progress is stored on users devices so they don't need to fear tracking or espionage, you can read about our motives for this in chapter [Monetization](#monetization).
 Anyone can offer decks for download online or simply export them as a file to later be imported by another user, as long as the decks use our supported format.
 
@@ -109,7 +92,10 @@ For the app all users are the same and you simply work with **your local** data.
 This may be seen as a disadvantage, because you cannot simply switch devices in learning sessions, but we believe this trade off is worth your privacy.
 We maybe add some privacy-preserving sync-mechanism in the future, see our [Backlog](#backlog).
 
-### Component based
+### Component based UI with Vue.js
+
+We are using the frontend framework [Vue.js](https://vuejs.org/).
+See [below](#why-vue) why we decided for Vue.js.
 
 In [Vue.js](https://vuejs.org/) the web app is structured into components, each fulfilling a single purpose.
 By splitting into small clearly arranged parts, the code is easier to understand and to maintain.
@@ -129,9 +115,8 @@ Every aspect of the app is designed to support one hand use no matter the screen
 We added the ability to swipe to the right to open the menu and added different design elements (like our logo) at certain locations to naturally move the complete user interaction to the bottom half of the screen. (This aspect is easily seen in the learning process.)
 
 We also decided to use [Vuetify](https://vuetifyjs.com/) and the _Material Design_ provided by it.
-This made development easier and quicker, because we could use already existing code and did not have to create our own templates.
-
-_Material Design_, responsiveness and a generally appealing design is a must-have for our app, simply because we expect it to be used almost exclusively on mobile devies.
+_Material Design_, responsiveness and a generally appealing design is a must-have for our app, simply because we expect Fancy Flashcard to be used almost exclusively on mobile devies.
+Using Vuetify made development easier and quicker, because we could use already existing UI components and did not have to create everything from scratch.
 
 ## Technology
 
@@ -162,9 +147,20 @@ To make [PWAs](https://web.dev/progressive-web-apps/) feel like native apps, a S
 It offers the possibility to cache data and resources which makes our app work offline.
 In the future the Service Worker may help us by offering access to notifications.
 
-Additionally we make our app installable by providing a manifest, thus users can add it to their homescreen and it feels like a natie app.
+Additionally we make our app installable by providing a manifest, thus users can add it to their homescreen and it feels like a native app.
 
 ### Technical insights and how we did it
+
+#### Terminology
+Cards (Q/A-pairs) are grouped into decks.
+Those decks can be imported via files.
+Files can be stored locally or accessed online via a URL.
+Each file contains multiple decks.
+Each deck is identified by a short name / id (only inside this file).
+It then contains some meta data (full name, description, ...) and multiple cards (questions with corresponding answers), each identified by some incrementing number (the next value is stored in the meta data so that there are no collisions when cards are deleted).
+You can find the file format for such files below.
+
+A card (question-answer-pair) is uniquely identified by the data source identifier (e.g. URL where the file is hosted, local filepath, ...), the deck short name / id and the id of the card itself (inside the deck).
 
 #### Learning Progress and Rating of Cards
 The learning progress is stored locally in the app.

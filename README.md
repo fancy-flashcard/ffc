@@ -13,7 +13,7 @@
     <a href="docs/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://fancy-flashcard.github.io/ffc/">Open PWA</a>
+    <a href="https://fancy-flashcard.github.io/ffc/">Start Learning</a>
     ·
     <a href="https://github.com/fancy-flashcard/ffc/issues">Report Bug</a>
     ·
@@ -26,17 +26,6 @@
     </a>
   </p>
 </p>
-
-# Fancy Flashcard <!-- omit in toc -->
-
-- [Screenshots](#screenshots)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-  - [Project setup](#project-setup)
-  - [Compiles and hot-reloads for development](#compiles-and-hot-reloads-for-development)
-  - [Compiles and minifies for production](#compiles-and-minifies-for-production)
-  - [Lints and fixes files](#lints-and-fixes-files)
-- [License](#license)
 
 ## Screenshots
 
