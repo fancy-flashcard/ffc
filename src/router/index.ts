@@ -23,6 +23,11 @@ const routes: Array<RouteConfig> = [
     props: true,
   },
   {
+    path: '/thirdparty',
+    name: 'Third Party Decks',
+    component: () => import('../views/ThirdPartyDecks.vue'),
+  },
+  {
     path: '/settings',
     name: 'Settings',
     component: () => import('../views/Settings.vue'),

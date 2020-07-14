@@ -1,0 +1,9 @@
+[
+    {
+        "type": "official",
+        "name": "Official Test Deck",
+        "author": "Niko Lockenvitz",
+        "desc": "Example Deck created with FFC CLI",
+        "url": "https://raw.githubusercontent.com/fancy-flashcard/ffc/master/cli/test.json"
+    }
+]

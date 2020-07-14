@@ -119,3 +119,11 @@ export interface NavBarConfigItem {
   icon: string;
   title: string;
 }
+
+export interface ThirdPartyDeck {
+  type: string;
+  name: string;
+  author: string;
+  desc: string;
+  url: string;
+}

@@ -1,9 +1,27 @@
 <template>
   <v-dialog v-model="showDialog" max-width="400" persistent>
     <v-card color="#2e2e2e">
-      <v-card-title class="headline">{{ options.title }}</v-card-title>
+      <v-card-title class="headline">
+        {{ options.title }}
+        <v-icon v-if="options.type" size="0.9em" color="indigo" class="mx-2">
+          {{options.type === 'sponsored' ?
+          'mdi-cash-usd-outline' : options.type === 'curated' ?
+          'mdi-check-decagram' : options.type === 'official' ?
+          'mdi-flash-circle' : null}}
+        </v-icon>
+      </v-card-title>
 
       <v-card-text v-if="options.message" class="text-left">{{ options.message }}</v-card-text>
+      <v-card-text v-else-if="options.multipleMessages" class="text-left">
+        <p
+          class="multiple-messages"
+          v-for="message in options.multipleMessages"
+          :key="message.name"
+        >
+          <b>{{message.name}}:</b>
+          {{message.value}}
+        </p>
+      </v-card-text>
 
       <v-list v-if="options.table">
         <v-list-item v-if="options.tableHead">
@@ -120,5 +138,8 @@ export default class Dialog extends Vue {
 .share-ffc-url {
   text-align: center;
   margin: 0 24px;
+}
+.multiple-messages {
+  margin-bottom: 0;
 }
 </style>

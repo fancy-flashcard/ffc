@@ -10,6 +10,11 @@
     "title": "Add Deck"
   },
   {
+    "to": "/thirdparty",
+    "icon": "mdi-package-variant",
+    "title": "Third Party Decks"
+  },
+  {
     "to": "/settings",
     "icon": "mdi-cog",
     "title": "Settings"
