@@ -28,8 +28,7 @@ import Component from "vue-class-component";
 
 @Component
 export default class ImportDeckFromURL extends Vue {
-  chosenURL =
-    "https://raw.githubusercontent.com/fancy-flashcard/ffc/master/cli/test.json";
+  chosenURL = "";
   fileContent = "";
   urlRules = [
     (value: string) =>
@@ -46,7 +45,7 @@ export default class ImportDeckFromURL extends Vue {
       // TODO: cors?!
       this.$eventHub.$emit(
         "snackbarEvent",
-        "An Error Occurred While Loading The File"
+        "An error occurred while loading the file"
       );
     }
   }

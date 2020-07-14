@@ -69,6 +69,7 @@ function showAddedDecksConfirmation(context: Context, addedDeckAndCards: addedDe
   }
 
   const options = {
+    persistent: false,
     title: "Successfully Imported Decks",
     message: "Following decks have been added:",
     tableHead: { name: "Deck", value: "Number of Cards" },
@@ -81,6 +82,10 @@ function showAddedDecksConfirmation(context: Context, addedDeckAndCards: addedDe
     buttons: [
       {
         name: "Close",
+        color: "grey",
+      },
+      {
+        name: "Go Home",
         color: "indigo",
         callback: function() {
           context.$router.push("/");
