@@ -361,7 +361,6 @@ Ideas we want to implement in the future, but did not have enough time to implem
 - analytics for insights into individial learning progress
 - internationalization
 - light color mode
-- see also [monetization.md](monetization.md)
 - sync learning progress across multiple devices
 - gamification
 - charts/trends
