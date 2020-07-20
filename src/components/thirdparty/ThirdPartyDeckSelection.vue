@@ -36,7 +36,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import thirdPartyList from "../../../third-party-decks.json";
 
-import { ThirdPartyDeck } from "../../types";
+import { Event, ThirdPartyDeck } from "../../types";
 
 @Component
 export default class ThirdPartyDeckSelection extends Vue {
@@ -75,17 +75,17 @@ export default class ThirdPartyDeckSelection extends Vue {
       ]
     };
 
-    this.$eventHub.$emit("showCustomDialog", options);
+    this.$eventHub.$emit(Event.SHOW_CUSTOM_DIALOG, options);
   }
 
   async onDownload(url: string) {
     try {
       const response = await fetch(url);
       const fileContent = await response.json();
-      this.$eventHub.$emit("addDecksFromJSON", fileContent);
+      this.$eventHub.$emit(Event.ADD_DECKS_FROM_JSON, fileContent, url);
     } catch (error) {
       this.$eventHub.$emit(
-        "snackbarEvent",
+        Event.SNACKBAR_EVENT,
         "An error occurred while loading the third party deck"
       );
     }

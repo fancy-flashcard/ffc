@@ -22,8 +22,8 @@ export function registerEventListenerForMainApp(context: any) {
   context.$eventHub.$on(Event.ADD_DECKS_FROM_FILE, (fileContent: string) => {
     addDecksFromFile(context, fileContent);
   });
-  context.$eventHub.$on(Event.ADD_DECKS_FROM_JSON, (fileContent: FFCFile) => {
-    addDecksFromJSON(context, fileContent);
+  context.$eventHub.$on(Event.ADD_DECKS_FROM_JSON, (fileContent: FFCFile, url?: string) => {
+    addDecksFromJSON(context, fileContent, url);
   });
   context.$eventHub.$on(Event.SNACKBAR_EVENT, (message: string) => {
     showSnackbar(context, message);
