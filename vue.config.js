@@ -16,5 +16,12 @@ module.exports = {
       args[0].title = 'Fancy Flashcard'
       return args
     })
+    config
+    .plugin('define')
+      .tap(args => {
+        let v = JSON.stringify(require('./package.json').version)
+        args[0]['process.env']['VERSION'] = v
+        return args
+      })
   },
 };
