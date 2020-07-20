@@ -182,6 +182,8 @@ Our first proposal is as follows:
 {
     "meta": {
         "author": "Name of the Author",
+        "uuid": "Optional UUID to allow updates (especially for local files)",
+        "url": "This keyword is reserved for internal use and will be overridden. Do not use it.",
         "...": "..."
     },
     "decks": {
@@ -190,6 +192,7 @@ Our first proposal is as follows:
                 "deck_name": "Full Name of the Deck",
                 "description": "Description",
                 "next_card_id": 3,
+                "short_name": "This keyword is reserved for internal use and will be overridden. Do not use it.",
                 "...": "..."
             },
             "cards": {
