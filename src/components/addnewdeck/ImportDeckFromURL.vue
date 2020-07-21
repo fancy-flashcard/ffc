@@ -26,6 +26,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
+import { Event } from "../../types";
+
 @Component
 export default class ImportDeckFromURL extends Vue {
   chosenURL = "";
@@ -39,12 +41,12 @@ export default class ImportDeckFromURL extends Vue {
     try {
       const response = await fetch(this.chosenURL);
       const fileContent = await response.json();
-      this.$eventHub.$emit("addDecksFromJSON", fileContent);
+      this.$eventHub.$emit(Event.ADD_DECKS_FROM_JSON, fileContent, this.chosenURL);
     } catch (error) {
       // console.log(error);
       // TODO: cors?!
       this.$eventHub.$emit(
-        "snackbarEvent",
+        Event.SNACKBAR_EVENT,
         "An error occurred while loading the file"
       );
     }

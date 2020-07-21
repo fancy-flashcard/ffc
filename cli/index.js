@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { v4: uuidv4 } = require('uuid');
 const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
@@ -72,6 +73,7 @@ async function cliEditFile (filename) {
     if (!curFilename.endsWith(".json")) curFilename += ".json";
     curFileContent = await readJSONFromFile(curFilename);
     console.log(`now editing ${curFilename}`);
+    addUUIDToFileIfItExistsNotYet();
     while (true) {
         const cmd = await readCommand(`Commands: new deck <name>, list decks, edit deck <name>, delete deck <name>, show meta, meta <attr> <value>, whereami, back`);
         if (cmd.startsWith("new deck ")) {
@@ -120,6 +122,12 @@ async function cliEditFile (filename) {
         } else {
             console.log("Your command was not understood...");
         }
+    }
+}
+
+function addUUIDToFileIfItExistsNotYet () {
+    if (!("uuid" in curFileContent.meta)) {
+        curFileContent.meta.uuid = uuidv4();
     }
 }
 

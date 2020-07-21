@@ -5,6 +5,8 @@
         <v-col cols="10">
           <span class="title">Fancy Flashcard</span>
           <br />
+          <span class="version">Version {{getVersion()}}</span>
+          <br />
           <v-btn color="indigo" @click="shareApp" class="my-4">Share Fancy Flashcard</v-btn>
 
           <v-footer app>
@@ -61,6 +63,9 @@ export default class About extends Vue {
       };
       this.$eventHub.$emit(Event.SHOW_CUSTOM_DIALOG, options);
     }
+  }
+  getVersion() {
+    return process.env.VERSION;
   }
 }
 </script>

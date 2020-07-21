@@ -1,6 +1,7 @@
 export interface FFCFile {
   meta: {
     author: string;
+    uuid?: string;
     [x: string]: any;
   };
   decks: {
@@ -27,9 +28,12 @@ export interface Deck {
   name: string;
   meta: {
     file: {
+      uuid?: string;
+      url?: string;
       [x: string]: any;
     };
     deck: {
+      short_name: string;
       [x: string]: any;
     };
   };
