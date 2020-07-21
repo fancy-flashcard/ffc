@@ -33,8 +33,9 @@
 
 ## The idea behind Fancy Flashcard
 
-Flashcards are usually used for learning languages and for that you mostly want to learn only one language at a given time.
-And there is the catch of most apps.
+Flashcard apps are usually used for learning a new language.
+In this context using more than one deck at a given time will not be useful.
+This is the catch of most apps.
 You simply can not learn multiple decks at once and have to create new mixed decks if you want to overcome this obstacle.
 Our idea was to simply choose which deck you want to include when learning.
 This way you do not have to repeat yourself over and over if you want to mix some decks while learning.
