@@ -21,13 +21,15 @@
   </p>
 
   <p align="center">
-    <img src="https://img.shields.io/badge/dynamic/json?color=informational&label=Version&query=%24.version&url=https%3A%2F%2Fraw.githubusercontent.com%2Ffancy-flashcard%2Fffc%2Fmaster%2Fpackage.json" alt="Version Number">
-    <a href="https://github.com/fancy-flashcard/ffc">
-      <img src="https://img.shields.io/github/workflow/status/fancy-flashcard/ffc/Build%20and%20Deploy?label=Build%20and%20Deploy&logo=github" alt="Build and Deploy status">
-    </a>
-    <a href="https://github.com/fancy-flashcard/ffc/blob/master/LICENSE">
-      <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License">
-    </a>
+    <a href="#"
+    ><img src="https://img.shields.io/badge/dynamic/json?color=informational&label=Version&query=%24.version&url=https%3A%2F%2Fraw.githubusercontent.com%2Ffancy-flashcard%2Fffc%2Fmaster%2Fpackage.json" alt="Version Number"
+    ></a>
+    <a href="https://github.com/fancy-flashcard/ffc/actions?query=workflow%3A%22Build+and+Deploy%22"
+    ><img src="https://img.shields.io/github/workflow/status/fancy-flashcard/ffc/Build%20and%20Deploy?label=Build%20and%20Deploy&logo=github" alt="Build and Deploy status"
+    ></a>
+    <a href="https://github.com/fancy-flashcard/ffc/blob/master/LICENSE"
+    ><img src="https://img.shields.io/badge/License-MIT-success" alt="MIT License"
+    ></a>
   </p>
 </p>
 
