@@ -352,13 +352,15 @@ We also want to have a look into tour testing as an extension to our current exp
 ### Some ideas
 Ideas we want to implement in the future, but did not have enough time to implement or work out completely.
 
-- update decks and keep learning progress
+- add security measures when updating decks (e.g. signatures, see [#16](https://github.com/fancy-flashcard/ffc/pull/16))
 - extend format and displaying in app to show not only simple text
   - Markdown support
   - formulas similar to LaTeX
   - image support
   - suggested answers to choose from (quiz-like, see below)
-- deck library, recommended decks
+- extend deck library / recommended decks / third-party-decks
+  - instructions how to make it to the third party deck list
+  - maybe some UI based deck creation
 - optimize random card selection algorithm + make it customizable in app settings
 - import decks from a website even if no CORS headers are sent, see [no-cors.md](no-cors.md)
 - analytics for insights into individial learning progress
