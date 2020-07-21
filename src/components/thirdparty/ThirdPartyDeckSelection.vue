@@ -1,6 +1,17 @@
 <template>
   <div class="ThirdPartyDeckSelection">
     <v-subheader>Third Party Decks</v-subheader>
+    <p class="description">
+      Easily Import decks created by others.
+      If you want to add your own deck to the selection, check out our
+      <a
+        href="https://github.com/fancy-flashcard/ffc/"
+      >GitHub repository</a>!
+      Decks can be official
+      <v-icon size="1em" color="indigo">mdi-flash-circle</v-icon>, curated
+      <v-icon size="1em" color="indigo">mdi-check-decagram</v-icon>, sponsored
+      <v-icon size="1em" color="indigo">mdi-cash-usd-outline</v-icon> or just plain old normal decks.
+    </p>
     <v-list>
       <v-list-item-group @change="onChange" v-model="deckModel">
         <v-list-item
@@ -102,5 +113,12 @@ export default class ThirdPartyDeckSelection extends Vue {
 .theme--dark.v-list-item--active:hover::before,
 .theme--dark.v-list-item--active::before {
   opacity: 0;
+}
+.description {
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 400;
+  padding: 0 16px;
+  color: rgba(255, 255, 255, 0.7);
 }
 </style>

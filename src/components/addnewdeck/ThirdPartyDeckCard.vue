@@ -3,8 +3,8 @@
     <v-card height="100%" raised>
       <v-card-title>Third Party Decks</v-card-title>
       <v-card-text>
-        Import decks created by others here.
-        You can add decks here as well, just checkout our GitHub repository.
+        Easily Import decks created by others.
+        If you want to add your own deck to the selection, check out our <a href="https://github.com/fancy-flashcard/ffc/">GitHub repository</a>!
       </v-card-text>
       <div class="horizontal-spacer"></div>
       <v-card-actions class="button-padding">
