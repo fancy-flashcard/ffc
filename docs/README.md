@@ -2,6 +2,7 @@
 
 ## Table of Contents <!-- omit in toc -->
 
+- [What is this about?](#what-is-this-about)
 - [The idea behind Fancy Flashcard](#the-idea-behind-fancy-flashcard)
 - [Architecture](#architecture)
   - [Progressive Web App](#progressive-web-app)
@@ -30,6 +31,20 @@
 - [Backlog](#backlog)
   - [Some ideas](#some-ideas)
   - [_FFQuiz_ - Fancy FlashQuiz](#ffquiz---fancy-flashquiz)
+
+## What is this about?
+
+First of all this app is part of a series of apps created by students as part of the lecture [mobile applications](https://github.com/michael-spengler/seminararbeiten-wwi17seb) as part of our last semester at university.
+We, as used in this context, are @nikolockenvitz and @FischerRene.
+We created this [PWA](https://web.dev/progressive-web-apps/) not only as a submission in this lecture, but also for us to use for learning.
+With this documentation we want to express what we did, how we did it and especially why we did it, so please take your time reading this.
+If you got any questions regarding this documentation or some decisions we made, feel free to open an issue and we will answer it in no time!
+(Please label the issues with the `documentation` tag if you create one.)
+
+What does this mean for the future of FFC?
+
+Our plan is to update further update this app with little features we deem to be necessary and important enough to us.
+But because of the license we decided upon, you can simply fork this project and create pull requests with features you would like to see in FFC!
 
 ## The idea behind Fancy Flashcard
 
