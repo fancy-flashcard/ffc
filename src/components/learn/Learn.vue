@@ -91,6 +91,7 @@ export default class Learn extends LearnProps {
   }
 
   updateCurLearningElement() {
+    if (!this.learningSessionManager) return;
     this.curLearningElement = this.learningSessionManager.getCurrentLearningSessionElementWithCardDetails();
     this.updateRatingForCurrentLearningElement();
     saveLearningSessionManagerDataToLocalStorage(this.learningSessionManager);
@@ -181,7 +182,9 @@ export default class Learn extends LearnProps {
   }
 
   finishSession() {
-    finishLearningDialog(this, this.getBarsForFinishLearningDialog());
+    finishLearningDialog(this, this.getBarsForFinishLearningDialog(), () => {
+      this.learningSessionManager = null;
+    });
   }
 
   getBarsForFinishLearningDialog(): CustomDialogOptionsBarChartBar[] {

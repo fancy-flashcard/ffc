@@ -9,7 +9,8 @@ import { clearLearningSessionManagerDataInLocalStorage } from "./learningSession
 
 export function finishLearningDialog(
   context: any,
-  bars: CustomDialogOptionsBarChartBar[]
+  bars: CustomDialogOptionsBarChartBar[],
+  callbackLearningFinished: { (): void }
 ) {
   const options = {
     title: "Finish Learning?",
@@ -32,6 +33,7 @@ export function finishLearningDialog(
             QuitLearningReason.NO_MORE_CARDS
           );
           clearLearningSessionManagerDataInLocalStorage();
+          callbackLearningFinished();
         },
       },
     ],
