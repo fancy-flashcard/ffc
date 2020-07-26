@@ -87,9 +87,14 @@ export function addDecksFromJSON(
       addedDecksAndCards.push({ name, numberOfCards: cards.length });
     }
 
+    const version = fileContent.meta.version
+      ? fileContent.meta.version
+      : undefined;
+
     showAddedDecksConfirmation(
       context,
       addedDecksAndCards,
+      version,
       updatedInsteadOfAddedFile
     );
   } catch (e) {
@@ -182,6 +187,7 @@ function updateDeckIfItExistsAndReturnStatusAndNumberOfCards(
 function showAddedDecksConfirmation(
   context: Context,
   addedDeckAndCards: addedDeckAndCards[],
+  version: string,
   updatedInsteadOfAddedFile: boolean
 ) {
   const numberOfAddedCards = addedDeckAndCards.reduce(
@@ -196,8 +202,12 @@ function showAddedDecksConfirmation(
     persistent: false,
     title: "Successfully Imported Decks",
     message: updatedInsteadOfAddedFile
-      ? "Following decks have been updated (you can see the number of cards added, updated and deleted in parentheses):"
-      : "Following decks have been added:",
+      ? "Following decks have been updated" +
+        (version ? " to version " + version : "") +
+        " (number of cards added / updated / deleted):"
+      : "The following decks" +
+        (version ? " (version: " + version + ") " : "") +
+        "have been added:",
     tableHead: { name: "Deck", value: "Number of Cards" },
     table: addedDeckAndCards.map((deck) => {
       return {

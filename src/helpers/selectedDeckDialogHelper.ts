@@ -56,6 +56,10 @@ export function showInfoForSelectedDeck(context: any) {
           key: "author",
           name: "Author",
         },
+        {
+          key: "version",
+          name: "Version",
+        },
       ],
     },
     {
