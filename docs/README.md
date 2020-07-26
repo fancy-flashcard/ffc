@@ -369,6 +369,9 @@ We also want to have a look into tour testing as an extension to our current exp
 Ideas we want to implement in the future, but did not have enough time to implement or work out completely.
 
 - add security measures when updating decks (e.g. signatures, see [#16](https://github.com/fancy-flashcard/ffc/pull/16))
+- automatically update all third party decks (that have been installed) when starting the app &rarr; should be either a background task or triggered manually and only show a snackbar when finishing ("Updated third party decks to newest versions")
+  - this may need us to include the version number inside the [third-party-decks.json](../third-party-decks.json)
+  - this would also enable us to control the flow of updates &rarr; security feature? only allow officially tagged "releases" as urls?
 - extend format and displaying in app to show not only simple text
   - Markdown support
   - formulas similar to LaTeX
