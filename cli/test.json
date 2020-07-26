@@ -1,7 +1,8 @@
 {
   "meta": {
     "author": "Niko Lockenvitz & Rene-Pascal Fischer",
-    "version": "1.1.1"
+    "version": "1.1.1",
+    "uuid": "6d4b5420-3c3e-42bc-addd-019597fd438b"
   },
   "decks": {
     "d0": {

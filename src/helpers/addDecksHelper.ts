@@ -87,9 +87,7 @@ export function addDecksFromJSON(
       addedDecksAndCards.push({ name, numberOfCards: cards.length });
     }
 
-    const version = fileContent.meta.version
-      ? fileContent.meta.version
-      : undefined;
+    const version = fileContent?.meta?.version;
 
     showAddedDecksConfirmation(
       context,
