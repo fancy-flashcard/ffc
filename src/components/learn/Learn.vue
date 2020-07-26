@@ -85,8 +85,13 @@ export default class Learn extends LearnProps {
       this.moveToPrev();
     });
   }
+  destroyed() {
+    this.$eventHub.$off(Event.SWIPE_LEFT_IN_LEARN);
+    this.$eventHub.$off(Event.SWIPE_RIGHT_IN_LEARN);
+  }
 
   updateCurLearningElement() {
+    if (!this.learningSessionManager) return;
     this.curLearningElement = this.learningSessionManager.getCurrentLearningSessionElementWithCardDetails();
     this.updateRatingForCurrentLearningElement();
     saveLearningSessionManagerDataToLocalStorage(this.learningSessionManager);
@@ -177,7 +182,9 @@ export default class Learn extends LearnProps {
   }
 
   finishSession() {
-    finishLearningDialog(this, this.getBarsForFinishLearningDialog());
+    finishLearningDialog(this, this.getBarsForFinishLearningDialog(), () => {
+      this.learningSessionManager = null;
+    });
   }
 
   getBarsForFinishLearningDialog(): CustomDialogOptionsBarChartBar[] {
