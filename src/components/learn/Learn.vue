@@ -85,6 +85,10 @@ export default class Learn extends LearnProps {
       this.moveToPrev();
     });
   }
+  destroyed() {
+    this.$eventHub.$off(Event.SWIPE_LEFT_IN_LEARN);
+    this.$eventHub.$off(Event.SWIPE_RIGHT_IN_LEARN);
+  }
 
   updateCurLearningElement() {
     this.curLearningElement = this.learningSessionManager.getCurrentLearningSessionElementWithCardDetails();
