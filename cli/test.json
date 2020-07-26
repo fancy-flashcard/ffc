@@ -1,13 +1,14 @@
 {
   "meta": {
-    "author": "Niko Lockenvitz"
+    "author": "Niko Lockenvitz & Rene-Pascal Fischer",
+    "version": "1.1.1"
   },
   "decks": {
     "d0": {
       "meta": {
-        "deck_name": "d0",
+        "deck_name": "A test deck",
         "next_card_id": 2,
-        "description": ""
+        "description": "This is a deck created for testing purposes. It is about \"mathematics\"."
       },
       "cards": {
         "0": {
@@ -22,9 +23,9 @@
     },
     "d1": {
       "meta": {
-        "deck_name": "d1",
+        "deck_name": "Another awesome test deck",
         "next_card_id": 3,
-        "description": ""
+        "description": "This is another deck created for testing purposes. It is about \"time\"."
       },
       "cards": {
         "0": {
