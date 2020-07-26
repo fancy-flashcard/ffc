@@ -61,6 +61,7 @@ const LearnProps = Vue.extend({
 export default class Learn extends LearnProps {
   numberOfStarsInRating = 5;
   learningSessionManager = new LearningSessionManager([]);
+  isLearningSessionFinishedAndComponentWillBeDestroyedSoon = false;
   curLearningElement = {
     deckId: 0,
     cardId: 0,
@@ -78,6 +79,7 @@ export default class Learn extends LearnProps {
   };
 
   created() {
+    this.isLearningSessionFinishedAndComponentWillBeDestroyedSoon = false;
     this.$eventHub.$on(Event.SWIPE_LEFT_IN_LEARN, () => {
       this.moveToNext();
     });
@@ -91,7 +93,7 @@ export default class Learn extends LearnProps {
   }
 
   updateCurLearningElement() {
-    if (!this.learningSessionManager) return;
+    if (this.isLearningSessionFinishedAndComponentWillBeDestroyedSoon) return;
     this.curLearningElement = this.learningSessionManager.getCurrentLearningSessionElementWithCardDetails();
     this.updateRatingForCurrentLearningElement();
     saveLearningSessionManagerDataToLocalStorage(this.learningSessionManager);
@@ -183,7 +185,7 @@ export default class Learn extends LearnProps {
 
   finishSession() {
     finishLearningDialog(this, this.getBarsForFinishLearningDialog(), () => {
-      this.learningSessionManager = null;
+      this.isLearningSessionFinishedAndComponentWillBeDestroyedSoon = true;
     });
   }
 
