@@ -28,7 +28,7 @@
     ><img src="https://img.shields.io/github/workflow/status/fancy-flashcard/ffc/Build%20and%20Deploy" alt="Build and Deploy status"
     ></a>
     <a href="LICENSE"
-    ><img src="https://img.shields.io/badge/license-MIT-success" alt="MIT License"
+    ><img src="https://img.shields.io/badge/license-GNU%20GPLv2-success" alt="GNU GPLv2 License"
     ></a>
   </p>
 </p>
