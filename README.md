@@ -17,17 +17,17 @@
     ·
     <a href="https://github.com/fancy-flashcard/ffc/issues">Report Bug</a>
     ·
-    <a href="https://github.com/fancy-flashcard/ffc/pulls">Contribute</a>
+    <a href="CONTRIBUTING.md">Contribute</a>
   </p>
 
   <p align="center">
-    <a href="#"
+    <a href="#readme"
     ><img src="https://img.shields.io/badge/dynamic/json?color=informational&label=version&query=%24.version&url=https%3A%2F%2Fraw.githubusercontent.com%2Ffancy-flashcard%2Fffc%2Fmaster%2Fpackage.json" alt="Version Number"
     ></a>
     <a href="https://github.com/fancy-flashcard/ffc/actions?query=workflow%3A%22Build+and+Deploy%22"
     ><img src="https://img.shields.io/github/workflow/status/fancy-flashcard/ffc/Build%20and%20Deploy" alt="Build and Deploy status"
     ></a>
-    <a href="https://github.com/fancy-flashcard/ffc/blob/master/LICENSE"
+    <a href="LICENSE"
     ><img src="https://img.shields.io/badge/license-MIT-success" alt="MIT License"
     ></a>
   </p>

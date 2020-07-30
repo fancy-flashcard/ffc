@@ -380,6 +380,11 @@ Ideas we want to implement in the future, but did not have enough time to implem
 - extend deck library / recommended decks / third-party-decks
   - instructions how to make it to the third party deck list
   - maybe some UI based deck creation
+  - make sure content of third party decks is okay
+    - develop some general guidelines / code of conduct
+    - community based process to evaluate decks?
+    - based on reputation of authors / type of third party deck: add hash of file to prevent deck from updating
+    - easy process to report decks violating code of conduct
 - optimize random card selection algorithm + make it customizable in app settings
 - import decks from a website even if no CORS headers are sent, see [no-cors.md](no-cors.md)
 - analytics for insights into individial learning progress
