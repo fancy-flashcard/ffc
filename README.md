@@ -8,7 +8,7 @@
   <h3 align="center">Fancy Flashcard</h3>
 
   <p align="center">
-    Lightweight open-source PWA to help you learning on all your devices
+    Lightweight free and open-source PWA to help you learning on all your devices
     <br />
     <a href="docs/"><strong>Explore the docs »</strong></a>
     <br />
