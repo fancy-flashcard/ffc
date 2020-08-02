@@ -25,6 +25,7 @@
   - [Third Party Decks: Curated, Featured & Sponsored Decks](#third-party-decks-curated-featured--sponsored-decks)
   - [Arrange contact to private tutors](#arrange-contact-to-private-tutors)
   - [Closing words on monetization](#closing-words-on-monetization)
+- [License](#license)
 - [Testing](#testing)
   - [Static tests](#static-tests)
   - [Dynamic tests & Manual tests](#dynamic-tests--manual-tests)
@@ -345,6 +346,30 @@ The constant fear of collecting personalized data and the misuse of it will hind
 In general we want to provide our app for free so that anyone can use it.
 Additionally we want to let others offer additional services and get commisions on their returns.
 
+## License
+
+Fancy Flashcard was invisioned as [Free Software (FOSS)](https://en.wikipedia.org/wiki/Free_software), because we want to share knowledge and offer persons interested in the app the ability to analyze, contribute and improve Fancy Flashcard.
+Especially students learning with Fancy Flashcards should be able to adapt it to their own needs.
+
+During development we thought a lot about licencing and how we want other to see FFC.
+Especially the idea of switching from MIT to GPL has occured to us not only once.
+
+When choosing the MIT License at the beginning of our project we had the ease of use for others wanting to build upon our foundation in mind as it has not much restrictions/conditions.
+We expected to have more contributions to the Fancy Flashcard ecosystem this way, which lets it grow faster, even if not all additions are open source.
+We also like the MIT License because it is really simple and short, so even inexperienced developers will first of all read it and be able understand it way quicker than most other licenses.
+
+After a while we were asked about our thoughts on GPL and why we'd chosen MIT.
+Because of this we started to think about it again.
+As a result of this thought process and having a more detailed look into free software, we came to the conclusion that we want Fancy Flashcard to be associated with free software.
+To enable this we need to make sure that the whole ecosystem is made of free software.
+Therefore we decided to update our license to a [_Copyleft License_](https://en.wikipedia.org/wiki/Copyleft).
+This might discourage some people to create app on the basis of Fancy Flashcard, but we think this is acceptable, because all improvements made have to be shared and thus are going to be open to anyone.
+This will ensure improvements are public and will result in additions that are at least as valuable as the ones made under the MIT license.
+Adding to this there will be no competitors build proprietary solutions using FFC as a basis and therefore decreasing Fancy Flashcards market share in favor of non free software.
+
+By choosing a Copyleft license we strengthen the FOSS ecosystem and enable it to have a brighter future with more free software.
+We believe this is a step in the right direction, because we want information and knowledge to be accessible to everyone for free and therefore try to help by creating a platform to enable people to share their knowledge.
+
 ## Testing
 
 ### Static tests
@@ -380,6 +405,11 @@ Ideas we want to implement in the future, but did not have enough time to implem
 - extend deck library / recommended decks / third-party-decks
   - instructions how to make it to the third party deck list
   - maybe some UI based deck creation
+  - make sure content of third party decks is okay
+    - develop some general guidelines / code of conduct
+    - community based process to evaluate decks?
+    - based on reputation of authors / type of third party deck: add hash of file to prevent deck from updating
+    - easy process to report decks violating code of conduct
 - optimize random card selection algorithm + make it customizable in app settings
 - import decks from a website even if no CORS headers are sent, see [no-cors.md](no-cors.md)
 - analytics for insights into individial learning progress
