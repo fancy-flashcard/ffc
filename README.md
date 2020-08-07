@@ -43,28 +43,15 @@ The app is build and deployed to https://fancy-flashcard.github.io/ffc on every 
 ## Contributing
 Feel free to report bugs or ideas via [Issues](issues).
 Also we highly appreciate [Pull Requests](pulls).
-Check out the [docs](docs) to get started and see how to set up `Vue.js` below.
+Check out the [Contributing Guide](CONTRIBUTING.md) and the [docs](docs) to get started and see how to set up `Vue.js` below.
 
-### Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
+| Action                                   | Command         |
+| ---------------------------------------- | --------------- |
+| Project setup                            | `npm install`   |
+| Compiles and hot-reloads for development | `npm run serve` |
+| Compiles and minifies for production     | `npm run build` |
+| Lints and fixes files                    | `npm run lint`  |
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+Distributed under the GPL-2.0 License. See [LICENSE](LICENSE) for more information.
