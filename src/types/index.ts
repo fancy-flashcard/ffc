@@ -112,6 +112,7 @@ export enum Event {
   CLEAR_LOCAL_STORAGE = "clearLocalStorage",
   SHOW_CUSTOM_DIALOG = "showCustomDialog",
   QUIT_LEARNING = "quitLearning",
+  PREPARE_QUIT_LEARNING = "prepareQuitLearning",
   SELECT_ALL_DECKS = "selectAllDecks",
   DESELECT_ALL_DECKS = "deselectAllDecks",
   SWIPE_LEFT_IN_LEARN = "swipeLeftInLearn",
