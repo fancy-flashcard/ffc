@@ -25,11 +25,15 @@ export function remove(key: string): void {
 }
 
 function clearAppData(): void {
+  const keysToDelete = [];
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i) || "";
     if (key.startsWith(LOCAL_STORAGE_APP_CONTEXT)) {
-      localStorage.removeItem(key);
+      keysToDelete.push(key);
     }
+  }
+  for (const key of keysToDelete) {
+    localStorage.removeItem(key);
   }
 }
 
