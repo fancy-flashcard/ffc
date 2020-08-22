@@ -10,7 +10,11 @@
               :decks="decks"
               :numberOfSelectedDecks="numberOfSelectedDecks"
             ></NavigationBar>
-            <router-view :decks="decks" :numberOfSelectedDecks="numberOfSelectedDecks" />
+            <router-view
+              :decks="decks"
+              :numberOfSelectedDecks="numberOfSelectedDecks"
+              :maxCardCount="maxCardCount"
+            />
             <v-snackbar app v-model="snackbar.snackbar" :timeout="snackbar.timeout">
               {{ snackbar.text }}
               <template v-slot:action="{ attrs }">
@@ -60,8 +64,10 @@ const AppProps = Vue.extend({
 })
 export default class App extends AppProps {
   propertiesToSyncWithLocalStorage = [
-    { key: "decks", defaultValue: [] }
+    { key: "decks", defaultValue: [] },
+    { key: "maxCardCount", defaultValue: "" }
   ] as SyncItem[];
+  maxCardCount = "";
   decks = [] as Deck[];
   snackbar = {
     text: "",
@@ -96,7 +102,11 @@ export default class App extends AppProps {
   mounted() {
     readFromLocalStorage(this);
     this.setSelectedStatusForAllDecks(false);
-    continueCurrentLearningSessionIfPresent(this.$eventHub, this.$router, this.decks);
+    continueCurrentLearningSessionIfPresent(
+      this.$eventHub,
+      this.$router,
+      this.decks
+    );
   }
 
   get numberOfSelectedDecks() {

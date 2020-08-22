@@ -4,6 +4,7 @@
       :decks="decks"
       :numberOfSelectedDecks="numberOfSelectedDecks"
       :learningSession="learningSession"
+      :maxCardCount="maxCardCount"
     />
   </div>
 </template>
@@ -20,7 +21,8 @@ const LearnProps = Vue.extend({
   props: {
     decks: { type: Array as () => Deck[] },
     learningSession: { type: Object as () => LearningSession },
-    numberOfSelectedDecks: Number
+    numberOfSelectedDecks: Number,
+    maxCardCount: String
   }
 });
 

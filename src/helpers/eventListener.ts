@@ -8,6 +8,7 @@ import {
 import { clearLocalStorage } from "./localStorageHelper";
 import { addDecksFromJSON, addDecksFromFile } from "./addDecksHelper";
 import { showSnackbar } from "./snackbarHelper";
+import { updateMaxCardCount } from "./updateMaxCardCount";
 
 export function registerEventListenerForMainApp(context: any) {
   context.$eventHub.$on(Event.DELETE_SELECTED_DECKS, () => {
@@ -22,9 +23,12 @@ export function registerEventListenerForMainApp(context: any) {
   context.$eventHub.$on(Event.ADD_DECKS_FROM_FILE, (fileContent: string) => {
     addDecksFromFile(context, fileContent);
   });
-  context.$eventHub.$on(Event.ADD_DECKS_FROM_JSON, (fileContent: FFCFile, url?: string) => {
-    addDecksFromJSON(context, fileContent, url);
-  });
+  context.$eventHub.$on(
+    Event.ADD_DECKS_FROM_JSON,
+    (fileContent: FFCFile, url?: string) => {
+      addDecksFromJSON(context, fileContent, url);
+    }
+  );
   context.$eventHub.$on(Event.SNACKBAR_EVENT, (message: string) => {
     showSnackbar(context, message);
   });
@@ -42,5 +46,8 @@ export function registerEventListenerForMainApp(context: any) {
       context.setSelectedStatusForAllDecks(false);
     }
     context.$router.replace("/");
+  });
+  context.$eventHub.$on(Event.UPDATE_MAX_CARD_COUNT, (newValue: string) => {
+    updateMaxCardCount(context, newValue);
   });
 }

@@ -4,7 +4,7 @@
       <v-card-title>Max Card Count</v-card-title>
       <v-card-text>
         <p>
-          Define the number of cards that will be in each learning session.
+          Limit the number of cards that will be in each learning session.
           <v-icon
             size="1em"
             @click="showHelpText = !showHelpText"
@@ -14,12 +14,12 @@
         <p
           class="description"
           v-show="showHelpText"
-        >If the given deck(s) has(have) less cards it will default to the number of cards in the given deck(s). The value "0" stands for every card in the given deck(s).</p>
-        <v-text-field v-model="maxCardCount" type="number" min="0" label="Maximum Cards" outlined></v-text-field>
+        >If the given deck(s) has(have) less cards it will default to the number of cards in the given deck(s).</p>
+        <v-text-field v-model="curMaxCardCount" type="number" min="1" :label="label" outlined></v-text-field>
       </v-card-text>
       <v-card-actions class="button-padding">
         <v-spacer></v-spacer>
-        <v-btn color="indigo" @click="updateMaxCardCount" right>Update Maximum Cards</v-btn>
+        <v-btn color="red" @click="deactivateMaxCardCount" right>Deactivate Limit</v-btn>
       </v-card-actions>
     </v-card>
   </v-col>
@@ -29,18 +29,36 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import {
-  getMaxCardCount,
-  setMaxCardCount
-} from "../../helpers/maxCardCountLocalStorageHelper";
+import { Event } from '../../types';
+
+const MaxCardCountProps = Vue.extend({
+  props: {
+    maxCardCount: String
+  }
+});
 
 @Component
-export default class MaxCardCount extends Vue {
+export default class MaxCardCount extends MaxCardCountProps {
+  noLimitString = "Currently no limit";
+  defaultLabel = "Maximum Cards";
   showHelpText = false;
-  maxCardCount: number | null = getMaxCardCount();
 
-  updateMaxCardCount() {
-    setMaxCardCount(this, this.maxCardCount);
+  get label() {
+    return this.maxCardCount === "0" || null
+      ? this.noLimitString
+      : this.defaultLabel;
+  }
+
+  get curMaxCardCount() {
+    return this.maxCardCount === "0" || null ? null : this.maxCardCount;
+  }
+
+  set curMaxCardCount(newValue) {
+    this.$eventHub.$emit(Event.UPDATE_MAX_CARD_COUNT, newValue);
+  }
+
+  deactivateMaxCardCount() {
+    this.$eventHub.$emit(Event.UPDATE_MAX_CARD_COUNT, "0");
   }
 }
 </script>
