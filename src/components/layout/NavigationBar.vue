@@ -71,7 +71,6 @@ import { Deck, Event, NavBarConfigItem } from '../../types';
 import navBarConfigJson from './navbar.json';
 
 import * as selectedDeckDialogHelper from "../../helpers/selectedDeckDialogHelper";
-import * as quitLearningDialogHelper from "../../helpers/quitLearningDialogHelper";
 
 const NavigationBarProps = Vue.extend({
   props: {
@@ -132,7 +131,7 @@ export default class NavigationBar extends NavigationBarProps {
     this.primaryDrawer.model = false;
   }
   quitLearning() {
-    quitLearningDialogHelper.quitLearningDialog(this);
+    this.$eventHub.$emit(Event.PREPARE_QUIT_LEARNING);
   }
   togglePrimaryDrawer() {
     this.primaryDrawer.model = !this.primaryDrawer.model;
