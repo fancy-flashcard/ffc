@@ -45,6 +45,7 @@ import {
   saveLearningSessionManagerDataToLocalStorage,
   getLearningSessionManagerDataFromLocalStorage
 } from "../../helpers/learningSessionStorageHelper";
+import { getMaxCardCount } from "../../helpers/maxCardCountLocalStorageHelper";
 
 const LearnProps = Vue.extend({
   props: {
@@ -60,6 +61,7 @@ const LearnProps = Vue.extend({
 })
 export default class Learn extends LearnProps {
   numberOfStarsInRating = 5;
+  maxCardCount = getMaxCardCount();
   learningSessionManager = new LearningSessionManager([]);
   isLearningSessionFinishedAndComponentWillBeDestroyedSoon = false;
   curLearningElement = {
@@ -131,11 +133,15 @@ export default class Learn extends LearnProps {
   }
 
   checkIfCardIsEndOfSession(): boolean {
-    return (
-      this.learningSessionManager.learningSession.currentElementIndex ===
+    const endOfSession =
+      (this.learningSessionManager.learningSession.currentElementIndex ===
         this.learningSessionManager.learningSession.elements.length - 1 &&
-      this.learningSessionManager.cardsToSelectFrom.length === 0
-    );
+        this.learningSessionManager.cardsToSelectFrom.length === 0) ||
+      (this.maxCardCount === 0
+        ? false
+        : this.learningSessionManager.learningSession.currentElementIndex ===
+          this.maxCardCount - 1);
+    return endOfSession;
   }
 
   moveToNext() {
