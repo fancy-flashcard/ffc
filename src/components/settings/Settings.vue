@@ -1,6 +1,10 @@
 <template>
-  <div class="settings">
-    <SettingsComponent />
+  <div>
+    <v-container fluid>
+      <v-row>
+        <ClearLocalStorage />
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -8,11 +12,11 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import SettingsComponent from "../components/settings/Settings.vue";
+import ClearLocalStorage from "./ClearLocalStorage.vue";
 
 @Component({
   components: {
-    SettingsComponent
+    ClearLocalStorage
   }
 })
 export default class Settings extends Vue {}
