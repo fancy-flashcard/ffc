@@ -41,6 +41,7 @@ import LearningSessionManager from "../../helpers/learningSessionManager";
 import FollowUpLearningSessionManager from "../../helpers/followUpLearningSessionManager";
 
 import { finishLearningDialog } from "../../helpers/finishLearningDialogHelper";
+import { quitLearningDialog } from "../../helpers/quitLearningDialogHelper";
 import {
   saveLearningSessionManagerDataToLocalStorage,
   getLearningSessionManagerDataFromLocalStorage
@@ -88,10 +89,14 @@ export default class Learn extends LearnProps {
     this.$eventHub.$on(Event.SWIPE_RIGHT_IN_LEARN, () => {
       this.moveToPrev();
     });
+    this.$eventHub.$on(Event.PREPARE_QUIT_LEARNING, () => {
+      this.quitLearning();
+    });
   }
   destroyed() {
     this.$eventHub.$off(Event.SWIPE_LEFT_IN_LEARN);
     this.$eventHub.$off(Event.SWIPE_RIGHT_IN_LEARN);
+    this.$eventHub.$off(Event.PREPARE_QUIT_LEARNING);
   }
 
   updateCurLearningElement() {
@@ -207,6 +212,10 @@ export default class Learn extends LearnProps {
       }
     }
     return bars;
+  }
+
+  quitLearning() {
+    quitLearningDialog(this, this.getBarsForFinishLearningDialog());
   }
 
   updateVerticalCentering() {
