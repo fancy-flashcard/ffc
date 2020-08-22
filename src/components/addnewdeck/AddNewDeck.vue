@@ -1,5 +1,5 @@
 <template>
-  <div class="settings">
+  <div>
     <v-container fluid>
       <v-row>
         <ThirdPartyDeckCard />
