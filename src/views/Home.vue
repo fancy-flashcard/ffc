@@ -1,6 +1,6 @@
 <template>
   <div class="deckselection">
-    <DeckSelection v-bind:decks="decks" v-bind:numberOfSelectedDecks="numberOfSelectedDecks"></DeckSelection>
+    <DeckSelection :decks="decks" :numberOfSelectedDecks="numberOfSelectedDecks"></DeckSelection>
   </div>
 </template>
 
