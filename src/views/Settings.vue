@@ -1,6 +1,6 @@
 <template>
   <div class="settings">
-    <SettingsComponent :maxCardCount="maxCardCount" />
+    <SettingsComponent :cardLimit="cardLimit" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ import SettingsComponent from "../components/settings/Settings.vue";
 
 const SettingProps = Vue.extend({
   props: {
-    maxCardCount: String
+    cardLimit: String
   }
 });
 

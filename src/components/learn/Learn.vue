@@ -51,7 +51,7 @@ const LearnProps = Vue.extend({
   props: {
     decks: { type: Array as () => Deck[] },
     numberOfSelectedDecks: Number,
-    maxCardCount: String
+    cardLimit: String
   }
 });
 
@@ -141,10 +141,10 @@ export default class Learn extends LearnProps {
       (this.learningSessionManager.learningSession.currentElementIndex ===
         this.learningSessionManager.learningSession.elements.length - 1 &&
         this.learningSessionManager.cardsToSelectFrom.length === 0) ||
-      (this.maxCardCount === "0"
+      (this.cardLimit === "0"
         ? false
         : this.learningSessionManager.learningSession.currentElementIndex ===
-          parseInt(this.maxCardCount) - 1);
+          parseInt(this.cardLimit) - 1);
     return endOfSession;
   }
 

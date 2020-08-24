@@ -117,7 +117,7 @@ export enum Event {
   DESELECT_ALL_DECKS = "deselectAllDecks",
   SWIPE_LEFT_IN_LEARN = "swipeLeftInLearn",
   SWIPE_RIGHT_IN_LEARN = "swipeRightInLearn",
-  UPDATE_MAX_CARD_COUNT = "updateMaxCardCount",
+  UPDATE_CARD_LIMIT = "updateCardLimit",
 }
 
 export interface NavBarConfigItem {

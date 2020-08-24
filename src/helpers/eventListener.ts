@@ -8,7 +8,6 @@ import {
 import { clearLocalStorage } from "./localStorageHelper";
 import { addDecksFromJSON, addDecksFromFile } from "./addDecksHelper";
 import { showSnackbar } from "./snackbarHelper";
-import { updateMaxCardCount } from "./updateMaxCardCount";
 
 export function registerEventListenerForMainApp(context: any) {
   context.$eventHub.$on(Event.DELETE_SELECTED_DECKS, () => {
@@ -47,7 +46,7 @@ export function registerEventListenerForMainApp(context: any) {
     }
     context.$router.replace("/");
   });
-  context.$eventHub.$on(Event.UPDATE_MAX_CARD_COUNT, (newValue: string) => {
-    updateMaxCardCount(context, newValue);
+  context.$eventHub.$on(Event.UPDATE_CARD_LIMIT, (newValue: string) => {
+    context.cardLimit = newValue;
   });
 }

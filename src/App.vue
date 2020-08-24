@@ -13,7 +13,7 @@
             <router-view
               :decks="decks"
               :numberOfSelectedDecks="numberOfSelectedDecks"
-              :maxCardCount="maxCardCount"
+              :cardLimit="cardLimit"
             />
             <v-snackbar app v-model="snackbar.snackbar" :timeout="snackbar.timeout">
               {{ snackbar.text }}
@@ -65,9 +65,9 @@ const AppProps = Vue.extend({
 export default class App extends AppProps {
   propertiesToSyncWithLocalStorage = [
     { key: "decks", defaultValue: [] },
-    { key: "maxCardCount", defaultValue: "" }
+    { key: "cardLimit", defaultValue: "" }
   ] as SyncItem[];
-  maxCardCount = "";
+  cardLimit = "";
   decks = [] as Deck[];
   snackbar = {
     text: "",

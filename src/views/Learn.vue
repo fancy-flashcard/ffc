@@ -4,7 +4,7 @@
       :decks="decks"
       :numberOfSelectedDecks="numberOfSelectedDecks"
       :learningSession="learningSession"
-      :maxCardCount="maxCardCount"
+      :cardLimit="cardLimit"
     />
   </div>
 </template>
@@ -22,7 +22,7 @@ const LearnProps = Vue.extend({
     decks: { type: Array as () => Deck[] },
     learningSession: { type: Object as () => LearningSession },
     numberOfSelectedDecks: Number,
-    maxCardCount: String
+    cardLimit: String
   }
 });
 

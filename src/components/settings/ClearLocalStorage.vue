@@ -21,7 +21,7 @@ import Component from "vue-class-component";
 import * as clearStorageDialogHelper from "../../helpers/clearStorageDialogHelper";
 
 @Component
-export default class MaxCardCount extends Vue {
+export default class ClearLocalStorage extends Vue {
   clearLocalStorage() {
     clearStorageDialogHelper.clearLocalStorageDialog(this);
   }

@@ -2,7 +2,7 @@
   <div>
     <v-container fluid>
       <v-row>
-        <MaxCardCount :maxCardCount="maxCardCount" />
+        <CardLimit :cardLimit="cardLimit" />
         <ClearLocalStorage />
       </v-row>
     </v-container>
@@ -13,18 +13,18 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import MaxCardCount from "./MaxCardCountCard.vue";
+import CardLimit from "./CardLimit.vue";
 import ClearLocalStorage from "./ClearLocalStorage.vue";
 
 const SettingProps = Vue.extend({
   props: {
-    maxCardCount: String
+    cardLimit: String
   }
 });
 
 @Component({
   components: {
-    MaxCardCount,
+    CardLimit,
     ClearLocalStorage
   }
 })
