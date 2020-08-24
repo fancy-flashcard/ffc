@@ -15,7 +15,14 @@
           class="description"
           v-show="showHelpText"
         >If the given deck(s) has (have) less cards it will default to the number of cards in the given deck(s).</p>
-        <v-text-field v-model="curcardLimit" type="number" min="1" :label="label" hide-details="auto" outlined></v-text-field>
+        <v-text-field
+          v-model="curCardLimit"
+          type="number"
+          min="1"
+          :label="label"
+          hide-details="auto"
+          outlined
+        ></v-text-field>
       </v-card-text>
       <v-card-actions class="button-padding">
         <v-spacer></v-spacer>
@@ -49,13 +56,11 @@ export default class CardLimit extends CardLimitProps {
       : this.defaultLabel;
   }
 
-  get curcardLimit() {
-    return this.cardLimit === "0" || null
-      ? null
-      : this.cardLimit;
+  get curCardLimit() {
+    return this.cardLimit === "0" || null ? null : this.cardLimit;
   }
 
-  set curcardLimit(newValue) {
+  set curCardLimit(newValue) {
     this.$eventHub.$emit(Event.UPDATE_CARD_LIMIT, newValue);
   }
 
@@ -73,17 +78,20 @@ export default class CardLimit extends CardLimitProps {
   align-items: center;
   font-size: 0.875rem;
   font-weight: 400;
-  padding: 0 16px;
   color: rgba(255, 255, 255, 0.7);
 }
 p .v-icon {
   color: inherit;
 }
 
+.paragraph {
+  display: flex;
+}
+
 /* Disable stepper in number input */
 ::v-deep input::-webkit-outer-spin-button,
 ::v-deep input::-webkit-inner-spin-button {
--webkit-appearance: none;
-margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>
