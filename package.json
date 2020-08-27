@@ -2,7 +2,7 @@
   "name": "ffc",
   "version": "2.2.0",
   "author": "Niko Lockenvitz & Rene-Pascal Fischer",
-  "license": "MIT",
+  "license": "GNU GPLv2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
