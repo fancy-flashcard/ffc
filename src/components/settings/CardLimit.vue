@@ -51,13 +51,11 @@ export default class CardLimit extends CardLimitProps {
   showHelpText = false;
 
   get label() {
-    return this.cardLimit === "0" || null
-      ? this.noLimitString
-      : this.defaultLabel;
+    return this.curCardLimit ? this.defaultLabel : this.noLimitString;
   }
 
   get curCardLimit() {
-    return this.cardLimit === "0" || null ? null : this.cardLimit;
+    return this.cardLimit === "0" || !this.cardLimit ? null : this.cardLimit;
   }
 
   set curCardLimit(newValue) {
@@ -89,9 +87,11 @@ p .v-icon {
 }
 
 /* Disable stepper in number input */
+::v-deep input,
 ::v-deep input::-webkit-outer-spin-button,
 ::v-deep input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+  -moz-appearance: textfield;
 }
 </style>
