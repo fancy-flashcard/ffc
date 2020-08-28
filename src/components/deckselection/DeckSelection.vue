@@ -8,7 +8,7 @@
             <v-list-item-title v-text="deck.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-icon
-            v-bind:class="{ hidden: numberOfSelectedDecks===0, visible: numberOfSelectedDecks>0 }"
+            :class="{ hidden: numberOfSelectedDecks===0, visible: numberOfSelectedDecks>0 }"
           >
             <v-icon v-if="deck.selected">mdi-check-box-outline</v-icon>
             <v-icon v-else>mdi-checkbox-blank-outline</v-icon>

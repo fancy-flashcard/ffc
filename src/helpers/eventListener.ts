@@ -22,9 +22,12 @@ export function registerEventListenerForMainApp(context: any) {
   context.$eventHub.$on(Event.ADD_DECKS_FROM_FILE, (fileContent: string) => {
     addDecksFromFile(context, fileContent);
   });
-  context.$eventHub.$on(Event.ADD_DECKS_FROM_JSON, (fileContent: FFCFile, url?: string) => {
-    addDecksFromJSON(context, fileContent, url);
-  });
+  context.$eventHub.$on(
+    Event.ADD_DECKS_FROM_JSON,
+    (fileContent: FFCFile, url?: string) => {
+      addDecksFromJSON(context, fileContent, url);
+    }
+  );
   context.$eventHub.$on(Event.SNACKBAR_EVENT, (message: string) => {
     showSnackbar(context, message);
   });
@@ -42,5 +45,8 @@ export function registerEventListenerForMainApp(context: any) {
       context.setSelectedStatusForAllDecks(false);
     }
     context.$router.replace("/");
+  });
+  context.$eventHub.$on(Event.UPDATE_CARD_LIMIT, (newValue: string) => {
+    context.cardLimit = newValue;
   });
 }

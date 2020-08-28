@@ -1,6 +1,11 @@
 <template>
-  <div class="settings">
-    <SettingsComponent :cardLimit="cardLimit" />
+  <div>
+    <v-container fluid>
+      <v-row>
+        <CardLimit :cardLimit="cardLimit" />
+        <ClearLocalStorage />
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -8,7 +13,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import SettingsComponent from "../components/settings/Settings.vue";
+import CardLimit from "./CardLimit.vue";
+import ClearLocalStorage from "./ClearLocalStorage.vue";
 
 const SettingProps = Vue.extend({
   props: {
@@ -18,7 +24,8 @@ const SettingProps = Vue.extend({
 
 @Component({
   components: {
-    SettingsComponent
+    CardLimit,
+    ClearLocalStorage
   }
 })
 export default class Settings extends SettingProps {}

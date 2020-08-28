@@ -50,7 +50,8 @@ import {
 const LearnProps = Vue.extend({
   props: {
     decks: { type: Array as () => Deck[] },
-    numberOfSelectedDecks: Number
+    numberOfSelectedDecks: Number,
+    cardLimit: String
   }
 });
 
@@ -136,11 +137,15 @@ export default class Learn extends LearnProps {
   }
 
   checkIfCardIsEndOfSession(): boolean {
-    return (
-      this.learningSessionManager.learningSession.currentElementIndex ===
+    const endOfSession =
+      (this.learningSessionManager.learningSession.currentElementIndex ===
         this.learningSessionManager.learningSession.elements.length - 1 &&
-      this.learningSessionManager.cardsToSelectFrom.length === 0
-    );
+        this.learningSessionManager.cardsToSelectFrom.length === 0) ||
+      (this.cardLimit === "0"
+        ? false
+        : this.learningSessionManager.learningSession.currentElementIndex ===
+          parseInt(this.cardLimit) - 1);
+    return endOfSession;
   }
 
   moveToNext() {
