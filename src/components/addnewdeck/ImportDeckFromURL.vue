@@ -5,7 +5,7 @@
       <v-card-text>
         <v-text-field
           class="deck-input"
-          label="Provide a File URL"
+          label="Provide a File URL (Raw JSON)"
           outlined
           clearable
           :rules="urlRules"
