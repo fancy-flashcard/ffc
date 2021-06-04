@@ -1,6 +1,9 @@
 import { showSnackbar } from "./snackbarHelper";
 
-const LOCAL_STORAGE_APP_CONTEXT = "ffc_";
+// const LOCAL_STORAGE_APP_CONTEXT = "ffc_";
+ 
+const url = new URL(window.location.href);
+const LOCAL_STORAGE_APP_CONTEXT = url.pathname + "_";
 
 export interface SyncItem {
   key: string;
