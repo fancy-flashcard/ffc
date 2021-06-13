@@ -19,6 +19,9 @@ At least you can obscure the URL and configure your webserver to accordingly so 
 Additionally, if you actually want to share your decks with all Fancy Flashcard users, we offer the possibility to add it as a _Third Party Deck_.
 Therefore it needs to be accessible on the web via URL.
 Just edit [third-party-decks.json](third-party-decks.json) and open a [pull request](https://github.com/fancy-flashcard/ffc/pulls).
+When adding a new deck you can choose between three types to add or add none at all.
+The three types are `official` for decks created by us, `curated` for staff picked decks and ones created by our fellow colleagues and `sponsored` if you want to pay to add a deck.
+If none of these types are selected it is simply a 'featured' deck, as described in [the docs](https://github.com/fancy-flashcard/ffc/tree/master/docs#third-party-decks-curated-featured--sponsored-decks).
 
 If you need help with any of the steps, feel free to contact us (via [issues](https://github.com/fancy-flashcard/ffc/issues) or email).
 
