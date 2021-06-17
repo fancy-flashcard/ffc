@@ -1,5 +1,7 @@
+const ASSET_PATH = process.env.ASSET_PATH || '/ffc/';
+
 module.exports = {
-  publicPath: "/ffc/",
+  publicPath: ASSET_PATH,
   transpileDependencies: ["vuetify"],
   pwa: {
     themeColor: "#363636",
