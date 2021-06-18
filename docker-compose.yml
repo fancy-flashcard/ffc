@@ -1,0 +1,7 @@
+version: '3.9'
+services:
+  ffc:
+    container_name: fancy-flashcard
+    build: .
+    ports:
+      - "8080:80"
