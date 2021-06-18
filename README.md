@@ -40,6 +40,16 @@
 ## Deployment
 The app is build and deployed to https://fancy-flashcard.github.io/ffc on every push to master branch (via GitHub Actions and GitHub Pages).
 
+You are also able to deploy this on your own with the help of docker.
+To do so you can
+1. Use the following docker commands:
+   > $ docker build . -t ffc <br>
+   > $ docker run --name fancy-flashcard -d -p 8080:80 ffc
+2. Use the following docker-compose command:
+   > $ docker-compose up -d
+
+Either way the app will be available on port ``8080``.
+
 ## Contributing
 Feel free to report bugs or ideas via [Issues](issues).
 Also we highly appreciate [Pull Requests](pulls).
